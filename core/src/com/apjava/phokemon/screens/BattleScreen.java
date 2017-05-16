@@ -3,6 +3,7 @@ package com.apjava.phokemon.screens;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.apjava.phokemon.mechanics.HealthBar;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -44,6 +45,8 @@ public class BattleScreen implements Screen {
 	private BitmapFont font;
 	private List<ParticleEffect> particleEffects;
 	private List<Actor> player1Moves, player2Moves;
+	//will remove and add to phokemon
+	private HealthBar hbTest, hbTest2;
 	
 	public BattleScreen(Game game) {
 		this.game = game;
@@ -63,6 +66,7 @@ public class BattleScreen implements Screen {
 		//music
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/battlemusic1.mp3"));
 		music.setLooping(true);
+		music.setVolume(0.5f);
 		music.play();
 		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick.wav"));
 		flameSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flameNEEDLICENSING.mp3"));
@@ -94,11 +98,18 @@ public class BattleScreen implements Screen {
 				public void clicked(InputEvent event, float x, float y) {
 					buttonSound.play();
 			    	addPlayer1Fire();
+			    	hbTest2.setCurrentHealthSmooth(hbTest2.getCurrentHealth()-50);
 			    }
 			});
 			player1Moves.add(attack);
 			stage.addActor(attack);
 		}
+		//test health bar positions
+		hbTest = new HealthBar(width-width/4.4f, height/2.75f, width/4.9f, height/30, 300, 300);
+		stage.addActor(hbTest);
+		hbTest2 = new HealthBar(width/5.2f, height-height/4.17f, width/4.9f, height/30, 300, 300);
+		stage.addActor(hbTest2);
+		//
 		
 		//add pokemon 1
 		Texture pokemonTexture1 = new Texture("charizard.png");
@@ -120,7 +131,7 @@ public class BattleScreen implements Screen {
 	 */
 	private void addPlayer1Fire() {
 		ParticleEffect fire = new ParticleEffect();
-		fire.load(Gdx.files.internal("particles/electric.particle"), Gdx.files.internal("particles/"));
+		fire.load(Gdx.files.internal("particles/bubbles.particle"), Gdx.files.internal("particles/"));
 		fire.setPosition(pokemon1.getX()+pokemon1.getWidth()/2, pokemon1.getY()+pokemon1.getHeight());
 		fire.start();
 		for(ParticleEmitter emitter: fire.getEmitters()) {

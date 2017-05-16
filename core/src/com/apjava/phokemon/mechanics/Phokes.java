@@ -8,7 +8,7 @@ public class Phokes extends Character {
 	public boolean burned, paralyzed;
 	private PhokeType phokeType;
 	
-	public Phokes(String name, PhokeType phokeType, int health, int attack, int defense, int speed,  AttackMove hit){
+	public Phokes(String name, PhokeType phokeType, int health, int attack, int defense, int speed,  AttackMove... moves){
 		this.phokeType = phokeType;
 		this.health = health;
 		this.attack = attack;
@@ -18,7 +18,8 @@ public class Phokes extends Character {
 		paralyzed = false;
 		burned = false;
 		move1 = new ArrayList<AttackMove>();
-		move1.add(hit);
+		for(int i=0; i<moves.length; i++)
+			move1.add(moves[i]);
 		
 	}
 	public PhokeType getPhokeType() {
