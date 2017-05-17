@@ -3,6 +3,7 @@ package com.apjava.phokemon.screens;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.apjava.phokemon.mechanics.BattleLabel;
 import com.apjava.phokemon.mechanics.HealthBar;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Game;
@@ -44,9 +45,11 @@ public class BattleScreen implements Screen {
 	private Sound buttonSound, flameSound;
 	private BitmapFont font;
 	private List<ParticleEffect> particleEffects;
-	private List<Actor> player1Moves, player2Moves;
+	private List<Actor> battleLog, player1Options, player1Moves, player2Options, player2Moves;
 	//will remove and add to phokemon
 	private HealthBar hbTest, hbTest2;
+	private static int BATTLE_LOG = 0, PLAYER1 = 1, PLAYER1_ATTACK = 2, PLAYER2 = 3, PLAYER2_ATTACK = 4;
+	private int dialogOption = 0;
 	
 	public BattleScreen(Game game) {
 		this.game = game;
@@ -81,7 +84,26 @@ public class BattleScreen implements Screen {
 		//add the demo moves
 		player1Moves = new ArrayList<Actor>();
 		player2Moves = new ArrayList<Actor>();
+		player1Options = new ArrayList<Actor>();
+		player2Options = new ArrayList<Actor>();
+		battleLog = new ArrayList<Actor>();
 		
+		//battle log
+		final BattleLabel battleLabel = new BattleLabel("Battle up", labelstyle);
+		battleLabel.setText("Player 1 has challenged\nplayer 2");
+		battleLabel.setOrigin(0, battleLabel.getHeight());
+		battleLabel.setPosition(width/25, height/8);
+		battleLabel.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				buttonSound.play();
+				battleLabel.setTextAnimated("Phokemon1 used fire punch");
+			}
+		});
+		battleLog.add(battleLabel);
+		stage.addActor(battleLabel);
+		
+		//add demo attacks
 		String[] attacks = {"Flamethrower", "Kick", "Aerial Ace", "Punch"};
 		for(int i = 0; i<attacks.length; i++) {
 			Label attack = new Label(attacks[i], labelstyle);
@@ -109,6 +131,17 @@ public class BattleScreen implements Screen {
 		stage.addActor(hbTest);
 		hbTest2 = new HealthBar(width/5.2f, height-height/4.17f, width/4.9f, height/30, 300, 300);
 		stage.addActor(hbTest2);
+		//pokemon name labels
+		Label name1 = new Label("Charizard", labelstyle);
+		name1.setWidth(width/10);
+		name1.setHeight(height/10);
+		name1.setPosition(width/1.7f, height/2.5f);
+		stage.addActor(name1);
+		Label name2 = new Label("Mewtwo", labelstyle);
+		name2.setWidth(width/10);
+		name2.setHeight(height/10);
+		name2.setPosition(width/50.0f, height-height/4.9f);
+		stage.addActor(name2);
 		//
 		
 		//add pokemon 1
@@ -166,6 +199,37 @@ public class BattleScreen implements Screen {
 			}
 		}
 		batch.end();
+		//decide and set visable and invisible what has to renderered
+		for(Actor actor: player1Options) {
+			if(dialogOption==BattleScreen.PLAYER1)
+				actor.setVisible(true);
+			else
+				actor.setVisible(false);
+		}
+		for(Actor actor: player2Options) {
+			if(dialogOption==BattleScreen.PLAYER2)
+				actor.setVisible(true);
+			else
+				actor.setVisible(false);
+		}
+		for(Actor actor: player1Moves) {
+			if(dialogOption==BattleScreen.PLAYER1_ATTACK)
+				actor.setVisible(true);
+			else
+				actor.setVisible(false);
+		}
+		for(Actor actor: player2Moves) {
+			if(dialogOption==BattleScreen.PLAYER2_ATTACK)
+				actor.setVisible(true);
+			else
+				actor.setVisible(false);
+		}
+		for(Actor actor: battleLog) {
+			if(dialogOption==BattleScreen.BATTLE_LOG)
+				actor.setVisible(true);
+			else
+				actor.setVisible(false);
+		}
 		stage.act(delta);
 		stage.draw();
 	}
