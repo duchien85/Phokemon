@@ -1,4 +1,4 @@
-package com.apjava.phokemon.mechanics;
+package phokemon;
 
 public class Flying implements PhokeType{
 	@Override

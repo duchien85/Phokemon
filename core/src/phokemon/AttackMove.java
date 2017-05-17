@@ -1,4 +1,4 @@
-package com.apjava.phokemon.mechanics;
+package phokemon;
 
 public abstract class AttackMove {
 	protected int power, accuracy;

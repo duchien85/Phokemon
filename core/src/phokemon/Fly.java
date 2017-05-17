@@ -1,4 +1,4 @@
-package com.apjava.phokemon.mechanics;
+package phokemon;
 
 public class Fly extends AttackMove{
 	public Fly(){

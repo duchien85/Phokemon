@@ -1,4 +1,4 @@
-package com.apjava.phokemon.mechanics;
+package phokemon;
 
 public class RazorLeaf extends AttackMove{
 	public RazorLeaf(){

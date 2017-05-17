@@ -3,8 +3,6 @@ package com.apjava.phokemon.screens;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.apjava.phokemon.mechanics.BattleLabel;
-import com.apjava.phokemon.mechanics.HealthBar;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -31,6 +29,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import phokemon.BattleLabel;
+import phokemon.HealthBar;
 
 public class BattleScreen implements Screen {
 	private Game game;
