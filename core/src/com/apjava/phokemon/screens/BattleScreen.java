@@ -73,7 +73,8 @@ public class BattleScreen implements Screen {
 		music.setVolume(0.5f);
 		music.play();
 		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick.wav"));
-		flameSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flameNEEDLICENSING.mp3"));
+		//flameSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flameNEEDLICENSING.mp3"));
+		flameSound = Gdx.audio.newSound(Gdx.files.internal("sounds/electricshock2.wav"));
 		//FONT AND LABELS
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/gameboyfont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -90,15 +91,16 @@ public class BattleScreen implements Screen {
 		battleLog = new ArrayList<Actor>();
 		
 		//battle log
-		final BattleLabel battleLabel = new BattleLabel("Battle up", labelstyle);
-		battleLabel.setText("Player 1 has challenged\nplayer 2");
+		final BattleLabel battleLabel = new BattleLabel("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", labelstyle);
+		battleLabel.setTextAnimated("Player 1 has challenged\nplayer 2");
 		battleLabel.setOrigin(0, battleLabel.getHeight());
 		battleLabel.setPosition(width/25, height/8);
 		battleLabel.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				buttonSound.play();
-				battleLabel.setTextAnimated("Phokemon1 used fire punch");
+				//battleLabel.setTextAnimated("Phokemon1 used fire punch");
+				dialogOption = BattleScreen.PLAYER1_ATTACK;
 			}
 		});
 		battleLog.add(battleLabel);
@@ -133,12 +135,12 @@ public class BattleScreen implements Screen {
 		hbTest2 = new HealthBar(width/5.2f, height-height/4.17f, width/4.9f, height/30, 300, 300);
 		stage.addActor(hbTest2);
 		//pokemon name labels
-		Label name1 = new Label("Charizard", labelstyle);
+		Label name1 = new Label("Barnizard", labelstyle);
 		name1.setWidth(width/10);
 		name1.setHeight(height/10);
 		name1.setPosition(width/1.7f, height/2.5f);
 		stage.addActor(name1);
-		Label name2 = new Label("Mewtwo", labelstyle);
+		Label name2 = new Label("Water Snake", labelstyle);
 		name2.setWidth(width/10);
 		name2.setHeight(height/10);
 		name2.setPosition(width/50.0f, height-height/4.9f);
@@ -146,11 +148,11 @@ public class BattleScreen implements Screen {
 		//
 		
 		//add pokemon 1
-		Texture pokemonTexture1 = new Texture("charizard.png");
+		Texture pokemonTexture1 = new Texture("barnizard.png");
 		pokemon1 = new Sprite(pokemonTexture1);
 		pokemon1.setBounds(width/8, height/3.5f, width/4, height/4);
 		
-		Texture pokemonTexture2 = new Texture("mewtwo.png");
+		Texture pokemonTexture2 = new Texture("watersnake.png");
 		pokemon2 = new Sprite(pokemonTexture2);
 		pokemon2.setBounds(width-width/3, height/2.0f, width/4, height/4);
 		
@@ -165,7 +167,7 @@ public class BattleScreen implements Screen {
 	 */
 	private void addPlayer1Fire() {
 		ParticleEffect fire = new ParticleEffect();
-		fire.load(Gdx.files.internal("particles/bubbles.particle"), Gdx.files.internal("particles/"));
+		fire.load(Gdx.files.internal("particles/electric.particle"), Gdx.files.internal("particles/"));
 		fire.setPosition(pokemon1.getX()+pokemon1.getWidth()/2, pokemon1.getY()+pokemon1.getHeight());
 		fire.start();
 		for(ParticleEmitter emitter: fire.getEmitters()) {
