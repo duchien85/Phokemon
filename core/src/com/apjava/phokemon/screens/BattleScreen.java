@@ -43,7 +43,7 @@ public class BattleScreen implements Screen {
 	private Sprite pokemon1, pokemon2;
 	private boolean animatePokemon = true;
 	private Music music;
-	private Sound buttonSound, flameSound, electricSound;
+	private Sound buttonSound, flameSound;
 	private BitmapFont font;
 	private List<ParticleEffect> particleEffects;
 	private List<Actor> battleLog, player1Options, player1Moves, player2Options, player2Moves;
@@ -73,8 +73,8 @@ public class BattleScreen implements Screen {
 		music.setVolume(0.5f);
 		music.play();
 		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick.wav"));
-		flameSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flameNEEDLICENSING.mp3"));
-		electricSound = Gdx.audio.newSound(Gdx.files.internal("sounds/electricshock2.wav"));
+		//flameSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flameNEEDLICENSING.mp3"));
+		flameSound = Gdx.audio.newSound(Gdx.files.internal("sounds/electricshock2.wav"));
 		//FONT AND LABELS
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/gameboyfont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -100,64 +100,15 @@ public class BattleScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 				buttonSound.play();
 				//battleLabel.setTextAnimated("Phokemon1 used fire punch");
-				dialogOption = BattleScreen.PLAYER1;
+				dialogOption = BattleScreen.PLAYER1_ATTACK;
 			}
 		});
 		battleLog.add(battleLabel);
 		stage.addActor(battleLabel);
 		
-		//player 1 options
-		final Label attack1Label = new Label("Attack", labelstyle);
-		attack1Label.setPosition(width/20, height/7);
-		stage.addActor(attack1Label);
-		attack1Label.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				buttonSound.play();
-				dialogOption = BattleScreen.PLAYER1_ATTACK;
-			}
-		});
-		player1Options.add(attack1Label);
-		final Label switch1Label = new Label("switch", labelstyle);
-		switch1Label.setPosition(width/1.5f, height/7);
-		stage.addActor(switch1Label);
-		switch1Label.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				buttonSound.play();
-			}
-		});
-		player1Options.add(switch1Label);
-		//
-		//player 2 options
-		final Label attack2Label = new Label("Attack", labelstyle);
-		attack2Label.setPosition(width/20, height/7);
-		stage.addActor(attack2Label);
-		attack2Label.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				buttonSound.play();
-				dialogOption = BattleScreen.PLAYER2_ATTACK;
-			}
-		});
-		player2Options.add(attack2Label);
-		final Label switch2Label = new Label("switch", labelstyle);
-		switch2Label.setPosition(width/1.5f, height/7);
-		stage.addActor(switch2Label);
-		switch2Label.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				buttonSound.play();
-			}
-		});
-		player2Options.add(switch2Label);
-		//
-		
 		//add demo attacks
-		String[] attacks = {"Flamethrower", "Bubble Beam", "Taser", "Leaf Beam"};
-		final String[] testTypes = {"fire", "water", "electric", "grass"};
+		String[] attacks = {"Flamethrower", "Kick", "Aerial Ace", "Punch"};
 		for(int i = 0; i<attacks.length; i++) {
-			final int attackIndex = i;
 			Label attack = new Label(attacks[i], labelstyle);
 			//attack.setScale(10);
 			attack.setWidth(width/10);
@@ -171,8 +122,7 @@ public class BattleScreen implements Screen {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					buttonSound.play();
-			    	addPlayer1Effects(testTypes[attackIndex]);
-			    	
+			    	addPlayer1Fire();
 			    	hbTest2.setCurrentHealthSmooth(hbTest2.getCurrentHealth()-50);
 			    }
 			});
@@ -212,65 +162,22 @@ public class BattleScreen implements Screen {
 	    
 	}
 	
-
 	/**
-	 * Add particles coming from player 1
-	 * @param typeStr ex fire,water
+	 * Changing later
 	 */
-	private void addPlayer1Effects(String typeStr) {
-		if(typeStr.equalsIgnoreCase("fire")) {
-			ParticleEffect fire = new ParticleEffect();
-			fire.load(Gdx.files.internal("particles/firethicc.particle"), Gdx.files.internal(""));
-			fire.setPosition(pokemon1.getX()+pokemon1.getWidth()/2, pokemon1.getY()+pokemon1.getHeight());
-			fire.start();
-			for(ParticleEmitter emitter: fire.getEmitters()) {
-				ScaledNumericValue angle = emitter.getAngle();
-				float degrees = 20.0f;
-				angle.setLow(degrees);
-				angle.setHigh(degrees+90.0f, degrees-90.0f);
-			}
-			particleEffects.add(fire);
-			flameSound.play(3.0f);
-		} else if(typeStr.equalsIgnoreCase("electric")) {
-			ParticleEffect fire = new ParticleEffect();
-			fire.load(Gdx.files.internal("particles/electric.particle"), Gdx.files.internal("particles/"));
-			fire.setPosition(pokemon1.getX()+pokemon1.getWidth()/2, pokemon1.getY()+pokemon1.getHeight());
-			fire.start();
-			for(ParticleEmitter emitter: fire.getEmitters()) {
-				ScaledNumericValue angle = emitter.getAngle();
-				float degrees = 20.0f;
-				angle.setLow(degrees);
-				angle.setHigh(degrees+90.0f, degrees-90.0f);
-			}
-			particleEffects.add(fire);
-			electricSound.play(3.0f);
-		} else if(typeStr.equalsIgnoreCase("water")) {
-			ParticleEffect fire = new ParticleEffect();
-			fire.load(Gdx.files.internal("particles/bubbles.particle"), Gdx.files.internal("particles/"));
-			fire.setPosition(pokemon1.getX()+pokemon1.getWidth()/2, pokemon1.getY()+pokemon1.getHeight());
-			fire.start();
-			for(ParticleEmitter emitter: fire.getEmitters()) {
-				ScaledNumericValue angle = emitter.getAngle();
-				float degrees = 20.0f;
-				angle.setLow(degrees);
-				angle.setHigh(degrees+90.0f, degrees-90.0f);
-			}
-			particleEffects.add(fire);
-			//electricSound.play(3.0f);
-		} else if(typeStr.equalsIgnoreCase("grass")) {
-			ParticleEffect fire = new ParticleEffect();
-			fire.load(Gdx.files.internal("particles/leaf.particle"), Gdx.files.internal("particles/"));
-			fire.setPosition(pokemon1.getX()+pokemon1.getWidth()/2, pokemon1.getY()+pokemon1.getHeight());
-			fire.start();
-			for(ParticleEmitter emitter: fire.getEmitters()) {
-				ScaledNumericValue angle = emitter.getAngle();
-				float degrees = 20.0f;
-				angle.setLow(degrees);
-				angle.setHigh(degrees+90.0f, degrees-90.0f);
-			}
-			particleEffects.add(fire);
-			//electricSound.play(3.0f);
+	private void addPlayer1Fire() {
+		ParticleEffect fire = new ParticleEffect();
+		fire.load(Gdx.files.internal("particles/electric.particle"), Gdx.files.internal("particles/"));
+		fire.setPosition(pokemon1.getX()+pokemon1.getWidth()/2, pokemon1.getY()+pokemon1.getHeight());
+		fire.start();
+		for(ParticleEmitter emitter: fire.getEmitters()) {
+			ScaledNumericValue angle = emitter.getAngle();
+			float degrees = 20.0f;
+			angle.setLow(degrees);
+			angle.setHigh(degrees+90.0f, degrees-90.0f);
 		}
+	    particleEffects.add(fire);
+	    flameSound.play(3.0f);
 	}
 
 	@Override
@@ -363,7 +270,6 @@ public class BattleScreen implements Screen {
 		music.dispose();
 		buttonSound.dispose();
 		flameSound.dispose();
-		electricSound.dispose();
 		font.dispose();
 	}
 
