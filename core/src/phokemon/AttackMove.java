@@ -3,34 +3,45 @@ package phokemon;
 public abstract class AttackMove {
 	protected int power, accuracy;
 	protected PhokeType type;
-	
-	public AttackMove(int power, int accuracy, PhokeType type) {
+	protected String name;
+	/**
+	 * 
+	 * @param power
+	 * @param accuracy
+	 * @param type
+	 * @param name of move
+	 */
+	public AttackMove(int power, int accuracy, PhokeType type, String name) {
 		this.power = power;
 		this.accuracy = accuracy;
 		this.type = type;
+		this.name = name;
 	}
 	
 	/**
 	 * 
-	 * @param self phokemon making the move
 	 * @param opponent phokemon being attacked null if status update
 	 * @return true if attack is successful
 	 */
-	public boolean attack(Phokes self, Phokes opponent) {
-		if(Math.random()*100 <= accuracy) {
-			
-			int damage = calculateDamage(opponent);
-			opponent.doDamage(damage);
+	public boolean attack(Phokes opponent) {
+		int random = (int) (Math.random()*100);
+		if(random<= accuracy) {
+			doDamage(opponent);
+			return true;
 		}
 		return false;
 	}
+	/**
+	 * subtracts damage of an attack from opponent's hp
+	 * @param opponent
+	 */
 	public void doDamage(Phokes opponent){
-		if(Math.random()*100 <= accuracy) {
-		
 		int damage = calculateDamage(opponent);
 		opponent.setHealth(opponent.getHealth() - damage);
+		System.out.println(opponent.getHealth()+" damage: "+opponent);
+		System.out.println(name + " was used against " + opponent.getName());
+		
 	}
-}
 	
 	/**
 	 * Calculate the damge of an attack move
@@ -48,6 +59,19 @@ public abstract class AttackMove {
 		int damage = (int) (((22*power*((double)power/opponent.defense))/50+2)*multiplyer);
 		
 		return damage;
+	}
+	
+	/**
+	 * 
+	 * @return the type of this move
+	 */
+	public PhokeType getPhokeType() {
+		return type;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
 	}
 	
 }

@@ -18,6 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+/**
+ * @author Jacob Murry
+ * @version 5-18-17
+ */
 public class MenuScreen implements Screen {
 	private Game game;
 	private SpriteBatch batch;

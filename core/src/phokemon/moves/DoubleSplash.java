@@ -1,9 +1,13 @@
-package phokemon;
+package phokemon.moves;
+
+import phokemon.AttackMove;
+import phokemon.Phokes;
+import phokemon.Water;
 
 public class DoubleSplash extends AttackMove{
 	
 	public DoubleSplash(){
-		super(75, 50, new Water());
+		super(75, 50, new Water(), "Double Splash");
 	}
 	
 	public void doDamage(Phokes opponent){

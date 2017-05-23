@@ -75,6 +75,14 @@ public class HealthBar extends Actor implements Disposable{
 	}
 	
 	/**
+	 * Set max health of phokemon
+	 * @param health
+	 */
+	public void setMaxHealth(int health) {
+		maxHealth = health;
+	}
+	
+	/**
 	 * Adjust health bar so that is slowly changes
 	 * @param health
 	 */
