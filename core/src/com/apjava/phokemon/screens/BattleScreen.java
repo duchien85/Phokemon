@@ -215,7 +215,7 @@ public class BattleScreen implements Screen {
 		
 		//////
 		//player 2
-		Phokes watersnake = new WaterSnake(false);
+		Phokes watersnake = new Barnizard(false);
 		player2 = new Player(this, 2, watersnake);
 		player2.setSelectedPhokemon(0);
 		player2.setAttack(false);
@@ -328,12 +328,12 @@ public class BattleScreen implements Screen {
 	private void addPlayer2Effects(String typeStr) {
 		if(typeStr.equalsIgnoreCase("fire")) {
 			ParticleEffect fire = new ParticleEffect();
-			fire.load(Gdx.files.internal("particles/firethicc.particle"), Gdx.files.internal(""));
+			fire.load(Gdx.files.internal("particles/firethicc2.particle"), Gdx.files.internal(""));
 			fire.setPosition(player2.getCurrentPhokemon().getSprite().getX()+player2.getCurrentPhokemon().getSprite().getWidth()/2, player2.getCurrentPhokemon().getSprite().getY()+player2.getCurrentPhokemon().getSprite().getHeight());
 			fire.start();
 			for(ParticleEmitter emitter: fire.getEmitters()) {
 				ScaledNumericValue angle = emitter.getAngle();
-				float degrees = 200.0f;
+				float degrees = 220.0f;
 				angle.setLow(degrees);
 				angle.setHigh(degrees+90.0f, degrees-90.0f);
 			}
@@ -341,12 +341,12 @@ public class BattleScreen implements Screen {
 			flameSound.play(6.0f);
 		} else if(typeStr.equalsIgnoreCase("electric")) {
 			ParticleEffect fire = new ParticleEffect();
-			fire.load(Gdx.files.internal("particles/electric.particle"), Gdx.files.internal("particles/"));
+			fire.load(Gdx.files.internal("particles/electric2.particle"), Gdx.files.internal("particles/"));
 			fire.setPosition(player2.getCurrentPhokemon().getSprite().getX()+player2.getCurrentPhokemon().getSprite().getWidth()/2, player2.getCurrentPhokemon().getSprite().getY()+player2.getCurrentPhokemon().getSprite().getHeight());
 			fire.start();
 			for(ParticleEmitter emitter: fire.getEmitters()) {
 				ScaledNumericValue angle = emitter.getAngle();
-				float degrees = 200.0f;
+				float degrees = 220.0f;
 				angle.setLow(degrees);
 				angle.setHigh(degrees+90.0f, degrees-90.0f);
 			}
@@ -367,12 +367,12 @@ public class BattleScreen implements Screen {
 			//electricSound.play(3.0f);
 		} else if(typeStr.equalsIgnoreCase("grass")) {
 			ParticleEffect fire = new ParticleEffect();
-			fire.load(Gdx.files.internal("particles/leaf.particle"), Gdx.files.internal("particles/"));
+			fire.load(Gdx.files.internal("particles/leaf2.particle"), Gdx.files.internal("particles/"));
 			fire.setPosition(player2.getCurrentPhokemon().getSprite().getX()+player2.getCurrentPhokemon().getSprite().getWidth()/2, player2.getCurrentPhokemon().getSprite().getY()+player2.getCurrentPhokemon().getSprite().getHeight());
 			fire.start();
 			for(ParticleEmitter emitter: fire.getEmitters()) {
 				ScaledNumericValue angle = emitter.getAngle();
-				float degrees = 200.0f;
+				float degrees = 220.0f;
 				angle.setLow(degrees);
 				angle.setHigh(degrees+90.0f, degrees-90.0f);
 			}
