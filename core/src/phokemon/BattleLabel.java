@@ -30,6 +30,14 @@ public class BattleLabel extends Label {
 		targetText = text;
 	}
 	
+	/**
+	 * 
+	 * @return true if text is still being typed on screen
+	 */
+	public boolean isTyping() {
+		return !(targetText.length()==getText().length);
+	}
+	
 	@Override
 	public void draw(Batch batch, float alpha) {
 		super.draw(batch, alpha);

@@ -9,6 +9,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * 5-10-17
+ * @author Jacob Murry
+ *
+ */
 public class HealthBar extends Actor implements Disposable{
 	private ShapeRenderer bgRenderer, fgRenderer;
 	private int currentHealth, maxHealth, targetHealth;
@@ -51,17 +56,20 @@ public class HealthBar extends Actor implements Disposable{
 		bgRenderer.setColor(Color.GRAY);
 		bgRenderer.rect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 		bgRenderer.end();
-		fgRenderer.begin(ShapeType.Filled);
-		if(((double) currentHealth/ maxHealth)<0.2) {
-			fgRenderer.setColor(Color.RED);
-			if(!lowHealthMusic.isPlaying())
-				lowHealthMusic.play();
-		} else if(((double) currentHealth/ maxHealth)<0.4)
-			fgRenderer.setColor(Color.YELLOW);
-		else
-			fgRenderer.setColor(Color.GREEN);
-		fgRenderer.rect(this.getX(), this.getY(), this.getWidth()/((float)maxHealth/currentHealth), this.getHeight());
-		fgRenderer.end();
+		if(currentHealth>0) {
+			fgRenderer.begin(ShapeType.Filled);
+			if(((double) currentHealth/ maxHealth)<0.2) {
+				fgRenderer.setColor(Color.RED);
+				if(!lowHealthMusic.isPlaying())
+					lowHealthMusic.play();
+			} else if(((double) currentHealth/ maxHealth)<0.4)
+				fgRenderer.setColor(Color.YELLOW);
+			else
+				fgRenderer.setColor(Color.GREEN);
+			fgRenderer.rect(this.getX(), this.getY(), this.getWidth()/((float)maxHealth/currentHealth), this.getHeight());
+			fgRenderer.end();
+			
+		}
 		batch.begin();
 	}
 	
@@ -70,7 +78,7 @@ public class HealthBar extends Actor implements Disposable{
 	 * @param health
 	 */
 	public void setCurrentHealth(int health) {
-		this.currentHealth = (health>0) ? health : 1;
+		this.currentHealth = health;
 		this.targetHealth = getCurrentHealth();
 	}
 	
@@ -87,7 +95,7 @@ public class HealthBar extends Actor implements Disposable{
 	 * @param health
 	 */
 	public void setCurrentHealthSmooth(int health) {
-		this.targetHealth = (health>0) ? health : 1;
+		this.targetHealth = health;
 	}
 	
 	/**

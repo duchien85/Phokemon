@@ -49,8 +49,8 @@ public class BattleScreen implements Screen {
 	private LabelStyle labelstyle;
 	private Sprite pokemon1, pokemon2;
 	private boolean animatePokemon = true;
-	private Music music;
-	private Sound buttonSound, flameSound, electricSound;
+	private Music music, victoryMusic;
+	private Sound buttonSound, flameSound, electricSound, dieSound;
 	private BitmapFont font;
 	private List<ParticleEffect> particleEffects;
 	private List<Actor> battleLog, player1Options, player1Moves, player2Options, player2Moves;
@@ -79,12 +79,14 @@ public class BattleScreen implements Screen {
 		bgImg = new Texture("battleTemplate.png");
 		//music
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/battlemusic1.mp3"));
+		victoryMusic = Gdx.audio.newMusic(Gdx.files.internal("music/victory.mp3"));
 		music.setLooping(true);
 		music.setVolume(0.5f);
 		music.play();
 		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick.wav"));
 		flameSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flameNEEDLICENSING.mp3"));
 		electricSound = Gdx.audio.newSound(Gdx.files.internal("sounds/electricshock2.wav"));
+		dieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/diesound.wav"));
 		//FONT AND LABELS
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/gameboyfont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -108,9 +110,10 @@ public class BattleScreen implements Screen {
 		battleLabel.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				buttonSound.play();
-				//battleLabel.setTextAnimated("Phokemon1 used fire punch");
-				dialogOption = nextDialogOption;
+				if(!battleLabel.isTyping()) {
+					buttonSound.play();
+					dialogOption = nextDialogOption;
+				}
 			}
 		});
 		battleLog.add(battleLabel);
@@ -489,7 +492,7 @@ public class BattleScreen implements Screen {
 			    public void run() {
 			    	player1.getCurrentPhokemon().getSprite().setAlpha(0.0f);
 			    	//play death sound
-			    	
+			    	dieSound.play(5.0f);
 			    	//see if there are any phokemon alive
 					if(player1.canPlay()) {
 						switchPhokemon(true);
@@ -497,6 +500,8 @@ public class BattleScreen implements Screen {
 						setDialog(BATTLE_LOG);
 						setNextDialog(BATTLE_LOG);
 						updateBattleLog("Player 2 has won");
+						music.stop();
+						victoryMusic.play();
 					}
 			    }
 			}, 5.0f);
@@ -508,7 +513,7 @@ public class BattleScreen implements Screen {
 			    public void run() {
 			    	player2.getCurrentPhokemon().getSprite().setAlpha(0.0f);
 			    	//play death sound
-			    	
+			    	dieSound.play(5.0f);
 			    	//see if there are any phokemon alive
 					if(player2.canPlay()) {
 						switchPhokemon(false);
@@ -516,6 +521,8 @@ public class BattleScreen implements Screen {
 						setDialog(BATTLE_LOG);
 						setNextDialog(BATTLE_LOG);
 						updateBattleLog("Player 1 has won");
+						music.stop();
+						victoryMusic.play();
 					}
 			    }
 			}, 5.0f);
@@ -563,9 +570,11 @@ public class BattleScreen implements Screen {
 		stage.dispose();
 		labelstyle.font.dispose();
 		music.dispose();
+		victoryMusic.dispose();
 		buttonSound.dispose();
 		flameSound.dispose();
 		electricSound.dispose();
+		dieSound.dispose();
 		font.dispose();
 	}
 
