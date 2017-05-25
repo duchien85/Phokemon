@@ -3,10 +3,11 @@ package phokemon.moves;
 import phokemon.AttackMove;
 import phokemon.Character;
 import phokemon.Normal;
+import phokemon.StatBoost;
 
 public class BulkUp extends AttackMove{
 	public BulkUp(){
-		super(0, 100, new Normal(), "Bulk Up");
+		super(0, 100, new StatBoost(), "Bulk Up");
 	}
 	public void doDamage(Character self){
 		self.setDefense((int)(self.getDefense()*1.5));

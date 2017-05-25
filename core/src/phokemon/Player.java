@@ -92,7 +92,11 @@ public class Player {
 		battleScreen.setDialog(BattleScreen.BATTLE_LOG);
 		if(hit) {
 			String moveName = self.getMoves().get(move).toString();
-			battleScreen.updateBattleLog(moveName + " was used against " + opponent.getName());
+			if(!self.getMoves().get(move).getPhokeType().toString().equals("statboost")) {
+				battleScreen.updateBattleLog(moveName + " was used against " + opponent.getName());
+			} else {
+				battleScreen.updateBattleLog(self.getName()+" used "+moveName);
+			}
 		} else {
 			battleScreen.updateBattleLog(self.getName()+"'s attack missed");
 		}

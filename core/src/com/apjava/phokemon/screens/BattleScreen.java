@@ -3,6 +3,8 @@ package com.apjava.phokemon.screens;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.SSLEngineResult.Status;
+
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -55,7 +57,7 @@ public class BattleScreen implements Screen {
 	private Sprite pokemon1, pokemon2;
 	private boolean animatePokemon = true;
 	private Music music, victoryMusic;
-	private Sound buttonSound, flameSound, electricSound, dieSound, waterSound, superEffective, notEffective;
+	private Sound buttonSound, flameSound, electricSound, dieSound, waterSound, superEffective, notEffective, statBoostSound;
 	private BitmapFont font;
 	private List<ParticleEffect> particleEffects;
 	private List<Actor> battleLog, player1Options, player1Moves, player2Options, player2Moves;
@@ -98,6 +100,7 @@ public class BattleScreen implements Screen {
 		waterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/watermove.wav"));
 		superEffective = Gdx.audio.newSound(Gdx.files.internal("sounds/supereffective1.wav"));
 		notEffective = Gdx.audio.newSound(Gdx.files.internal("sounds/noteffective1.wav"));
+		statBoostSound = Gdx.audio.newSound(Gdx.files.internal("sounds/statboost.wav"));
 		//FONT AND LABELS
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/gameboyfont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -346,6 +349,19 @@ public class BattleScreen implements Screen {
 			}
 			particleEffects.add(fire);
 			//electricSound.play(3.0f);
+		} else if(typeStr.equalsIgnoreCase("statboost")) {
+			ParticleEffect fire = new ParticleEffect();
+			fire.load(Gdx.files.internal("particles/status.particle"), Gdx.files.internal(""));
+			fire.setPosition(player1.getCurrentPhokemon().getSprite().getX()+player1.getCurrentPhokemon().getSprite().getWidth()/2, player1.getCurrentPhokemon().getSprite().getY()+player1.getCurrentPhokemon().getSprite().getHeight());
+			fire.start();
+			for(ParticleEmitter emitter: fire.getEmitters()) {
+				ScaledNumericValue angle = emitter.getAngle();
+				float degrees = 20.0f;
+				angle.setLow(degrees);
+				angle.setHigh(degrees+90.0f, degrees-90.0f);
+			}
+			particleEffects.add(fire);
+			statBoostSound.play(3.0f);
 		}
 	}
 	
@@ -406,6 +422,19 @@ public class BattleScreen implements Screen {
 			}
 			particleEffects.add(fire);
 			
+		} else if(typeStr.equalsIgnoreCase("statboost")) {
+			ParticleEffect fire = new ParticleEffect();
+			fire.load(Gdx.files.internal("particles/status.particle"), Gdx.files.internal(""));
+			fire.setPosition(player2.getCurrentPhokemon().getSprite().getX()+player2.getCurrentPhokemon().getSprite().getWidth()/2, player2.getCurrentPhokemon().getSprite().getY()+player2.getCurrentPhokemon().getSprite().getHeight());
+			fire.start();
+			for(ParticleEmitter emitter: fire.getEmitters()) {
+				ScaledNumericValue angle = emitter.getAngle();
+				float degrees = 220.0f;
+				angle.setLow(degrees);
+				angle.setHigh(degrees+90.0f, degrees-90.0f);
+			}
+			particleEffects.add(fire);
+			statBoostSound.play(6.0f);
 		}
 	}
 
@@ -672,6 +701,9 @@ public class BattleScreen implements Screen {
 		electricSound.dispose();
 		dieSound.dispose();
 		waterSound.dispose();
+		superEffective.dispose();
+		notEffective.dispose();
+		statBoostSound.dispose();
 		font.dispose();
 	}
 
