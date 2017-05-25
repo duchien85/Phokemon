@@ -9,6 +9,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * @version 5-12-17
+ * @author Jacob Murry
+ *
+ */
 public class Phokemon extends Game {
 	
 	@Override

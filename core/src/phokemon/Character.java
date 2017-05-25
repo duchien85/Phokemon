@@ -3,6 +3,11 @@ package phokemon;
 
 import java.util.List;
 
+/**
+ * 5-10-17
+ * @author Jacob Murry, Rishabh A
+ *
+ */
 public abstract class Character {
 	protected int health, maxHealth, attack, defense, speed;
 	protected String name;

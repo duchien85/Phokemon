@@ -31,6 +31,11 @@ import com.badlogic.gdx.utils.Align;
 import phokemon.BattleLabel;
 import phokemon.HealthBar;
 
+/**
+ * @version 5-22-17
+ * @author Jacob Murry
+ *
+ */
 public class PickingScreen implements Screen{
 
 	private Game game;

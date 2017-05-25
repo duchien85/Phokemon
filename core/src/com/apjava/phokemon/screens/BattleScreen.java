@@ -40,6 +40,11 @@ import phokemon.Player;
 import phokemon.phokes.Barnizard;
 import phokemon.phokes.WaterSnake;
 
+/**
+ * @version 5-12-17
+ * @author Jacob Murry
+ *
+ */
 public class BattleScreen implements Screen {
 	private Game game;
 	private SpriteBatch batch;
@@ -50,7 +55,7 @@ public class BattleScreen implements Screen {
 	private Sprite pokemon1, pokemon2;
 	private boolean animatePokemon = true;
 	private Music music, victoryMusic;
-	private Sound buttonSound, flameSound, electricSound, dieSound;
+	private Sound buttonSound, flameSound, electricSound, dieSound, waterSound;
 	private BitmapFont font;
 	private List<ParticleEffect> particleEffects;
 	private List<Actor> battleLog, player1Options, player1Moves, player2Options, player2Moves;
@@ -59,8 +64,11 @@ public class BattleScreen implements Screen {
 	public static int BATTLE_LOG = 0, PLAYER1 = 1, PLAYER1_ATTACK = 2, PLAYER2 = 3, PLAYER2_ATTACK = 4;
 	private int dialogOption = 0;
 	private int nextDialogOption = PLAYER1;
+	private boolean isDraw = false;
 	private Player player1, player2;
 	private BattleLabel battleLabel;
+	private boolean player1Attacking = false, player2Attacking = false;
+	private int player1Move = 0, player2Move = 0;
 	
 	public BattleScreen(Game game) {
 		this.game = game;
@@ -87,6 +95,7 @@ public class BattleScreen implements Screen {
 		flameSound = Gdx.audio.newSound(Gdx.files.internal("sounds/flameNEEDLICENSING.mp3"));
 		electricSound = Gdx.audio.newSound(Gdx.files.internal("sounds/electricshock2.wav"));
 		dieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/diesound.wav"));
+		waterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/watermove.wav"));
 		//FONT AND LABELS
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/gameboyfont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -112,7 +121,12 @@ public class BattleScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 				if(!battleLabel.isTyping()) {
 					buttonSound.play();
-					dialogOption = nextDialogOption;
+					if(isDraw) {
+						
+					} else {
+						dialogOption = nextDialogOption;
+					}
+			
 				}
 			}
 		});
@@ -202,10 +216,16 @@ public class BattleScreen implements Screen {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					buttonSound.play();
-			    	if(player1.attack(attackIndex, player1.getCurrentPhokemon(), player2.getCurrentPhokemon()))
+			    	/*if(player1.attack(attackIndex, player1.getCurrentPhokemon(), player2.getCurrentPhokemon()))
 			    		addPlayer1Effects(move.getPhokeType().toString());
 			    	hbTest2.setCurrentHealthSmooth(player2.getCurrentPhokemon().getHealth());
-			    	checkPhokemon();
+			    	checkPhokemon();*/
+					player1Attacking = true;
+					player1Move = attackIndex;
+					//tell log for player 2 to select move
+					setDialog(BATTLE_LOG);
+					setNextDialog(PLAYER2);
+					updateBattleLog("Player 2 Select Move");
 			    }
 			});
 			player1Moves.add(attack);
@@ -215,7 +235,7 @@ public class BattleScreen implements Screen {
 		
 		//////
 		//player 2
-		Phokes watersnake = new Barnizard(false);
+		Phokes watersnake = new WaterSnake(false);
 		player2 = new Player(this, 2, watersnake);
 		player2.setSelectedPhokemon(0);
 		player2.setAttack(false);
@@ -245,11 +265,17 @@ public class BattleScreen implements Screen {
 			attack.addListener(new ClickListener(){
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					buttonSound.play();
+					/*buttonSound.play();
 					if(player2.attack(attackIndex, player2.getCurrentPhokemon(), player1.getCurrentPhokemon()))
 						addPlayer2Effects(move.getPhokeType().toString());
 					hbTest.setCurrentHealthSmooth(player1.getCurrentPhokemon().getHealth());
-					checkPhokemon();
+					checkPhokemon();*/
+					player2Attacking = true;
+					player2Move = attackIndex;
+					//tell log for player 2 to select move
+					setDialog(BATTLE_LOG);
+					isDraw = true;
+					doMoves();
 				}
 			});
 			player2Moves.add(attack);
@@ -304,7 +330,7 @@ public class BattleScreen implements Screen {
 				angle.setHigh(degrees+90.0f, degrees-90.0f);
 			}
 			particleEffects.add(fire);
-			//electricSound.play(3.0f);
+			waterSound.play(6.0f);
 		} else if(typeStr.equalsIgnoreCase("grass")) {
 			ParticleEffect fire = new ParticleEffect();
 			fire.load(Gdx.files.internal("particles/leaf.particle"), Gdx.files.internal("particles/"));
@@ -364,7 +390,7 @@ public class BattleScreen implements Screen {
 				angle.setHigh(degrees+90.0f, degrees-90.0f);
 			}
 			particleEffects.add(fire);
-			//electricSound.play(3.0f);
+			waterSound.play(6.0f);
 		} else if(typeStr.equalsIgnoreCase("grass")) {
 			ParticleEffect fire = new ParticleEffect();
 			fire.load(Gdx.files.internal("particles/leaf2.particle"), Gdx.files.internal("particles/"));
@@ -377,7 +403,7 @@ public class BattleScreen implements Screen {
 				angle.setHigh(degrees+90.0f, degrees-90.0f);
 			}
 			particleEffects.add(fire);
-			//electricSound.play(3.0f);
+			
 		}
 	}
 
@@ -478,8 +504,72 @@ public class BattleScreen implements Screen {
 		nextDialogOption = d;
 	}
 	
-	/**
-	 * Acts as game loop/logic 
+	private void doMoves() {
+		checkPhokemon();
+		if(!player1Attacking) {
+			//switch player 1
+		} if(!player2Attacking) {
+			//switch player 2
+		}
+		if(player1.getCurrentPhokemon().getSpeed()>player2.getCurrentPhokemon().getSpeed()) {
+			//player 1 attacks first
+			if(player1Attacking)
+				player1Attack();
+			if(player2Attacking) {
+				Timer.schedule(new Task() {
+					
+					@Override
+					public void run() {
+						player2Attack();
+					}
+				}, 5.0f);
+			}
+		} else {
+			//player 2 attacks first
+			if(player2Attacking)
+				player2Attack();
+			if(player1Attacking){
+				Timer.schedule(new Task() {
+					
+					@Override
+					public void run() {
+						player1Attack();
+					}
+				}, 5.0f);
+			}
+		}
+		
+		Timer.schedule(new Task() {
+			
+			@Override
+			public void run() {
+				//while(battleLabel.isTyping()) {
+					
+				
+				setDialog(BATTLE_LOG);
+				setNextDialog(PLAYER1);
+				isDraw = false;
+				//updateBattleLog("Player 1 Select Move");
+			}
+		}, 5.0f);
+		
+	}
+	
+	private void player1Attack() {
+		if(player1.attack(player1Move, player1.getCurrentPhokemon(), player2.getCurrentPhokemon()))
+    		addPlayer1Effects(player1.getCurrentPhokemon().getMoves().get(player1Move).getPhokeType().toString());
+    	hbTest2.setCurrentHealthSmooth(player2.getCurrentPhokemon().getHealth());
+    	checkPhokemon();
+	}
+	
+	private void player2Attack() {
+		if(player2.attack(player2Move, player2.getCurrentPhokemon(), player1.getCurrentPhokemon()))
+			addPlayer2Effects(player2.getCurrentPhokemon().getMoves().get(player2Move).getPhokeType().toString());
+		hbTest.setCurrentHealthSmooth(player1.getCurrentPhokemon().getHealth());
+		checkPhokemon();
+	}
+	
+	/** 
 	 * checks if phokemon are alive
 	 * and proceeds accordingly
 	 */
@@ -575,6 +665,7 @@ public class BattleScreen implements Screen {
 		flameSound.dispose();
 		electricSound.dispose();
 		dieSound.dispose();
+		waterSound.dispose();
 		font.dispose();
 	}
 

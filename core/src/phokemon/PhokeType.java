@@ -1,5 +1,10 @@
 package phokemon;
 
+/**
+ * @version 5-13-17
+ * @author Jacob Murry
+ *
+ */
 public interface PhokeType {
 	public String toString();
 	
