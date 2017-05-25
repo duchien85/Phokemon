@@ -55,7 +55,7 @@ public class BattleScreen implements Screen {
 	private Sprite pokemon1, pokemon2;
 	private boolean animatePokemon = true;
 	private Music music, victoryMusic;
-	private Sound buttonSound, flameSound, electricSound, dieSound, waterSound;
+	private Sound buttonSound, flameSound, electricSound, dieSound, waterSound, superEffective, notEffective;
 	private BitmapFont font;
 	private List<ParticleEffect> particleEffects;
 	private List<Actor> battleLog, player1Options, player1Moves, player2Options, player2Moves;
@@ -96,6 +96,8 @@ public class BattleScreen implements Screen {
 		electricSound = Gdx.audio.newSound(Gdx.files.internal("sounds/electricshock2.wav"));
 		dieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/diesound.wav"));
 		waterSound = Gdx.audio.newSound(Gdx.files.internal("sounds/watermove.wav"));
+		superEffective = Gdx.audio.newSound(Gdx.files.internal("sounds/supereffective1.wav"));
+		notEffective = Gdx.audio.newSound(Gdx.files.internal("sounds/noteffective1.wav"));
 		//FONT AND LABELS
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/gameboyfont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -626,7 +628,11 @@ public class BattleScreen implements Screen {
 	}
 	
 	public void playSuperEffectiveSound() {
-		
+		superEffective.play(6.0f);
+	}
+	
+	public void playNotEffectiveSound() {
+		notEffective.play(6.0f);
 	}
 
 	@Override

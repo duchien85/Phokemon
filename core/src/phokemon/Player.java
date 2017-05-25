@@ -87,7 +87,7 @@ public class Player {
 	 * @return true of attack is successful
 	 */
 	public boolean attack(int move, Phokes self, Phokes opponent){
-		boolean hit = self.getMoves().get(move).attack(opponent);
+		boolean hit = self.getMoves().get(move).attack(battleScreen, opponent);
 		battleScreen.setNextDialog((battleScreen.getDialog()==BattleScreen.PLAYER1_ATTACK) ? BattleScreen.PLAYER2 : BattleScreen.PLAYER1);
 		battleScreen.setDialog(BattleScreen.BATTLE_LOG);
 		if(hit) {
