@@ -2,7 +2,7 @@ package phokemon;
 
 /**
  * @version 5-13-17
- * @author Jacob Murry
+ * @author Jacob Murry, Rishabh, Kalpit, Chintan, Nick
  *
  */
 public interface PhokeType {

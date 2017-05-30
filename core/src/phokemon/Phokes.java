@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * 
+ * @author Rishabh, Jacob, Kalpit, Chintan, Nick
+ * @version 5-20-17
+ */
 public class Phokes extends Character implements Disposable{
 
 	public boolean burned, paralyzed;
@@ -14,6 +19,18 @@ public class Phokes extends Character implements Disposable{
 	private Sprite phokesSprite;
 	private Texture phokesTexture;
 	
+	/**
+	 * Create phoke object with 
+	 * @param isPlayer1
+	 * @param image path to image
+	 * @param name
+	 * @param phokeType
+	 * @param health
+	 * @param attack
+	 * @param defense
+	 * @param speed
+	 * @param hits the attacks
+	 */
 	public Phokes(boolean isPlayer1, String image, String name, PhokeType phokeType, int health, int attack, int defense, int speed,  AttackMove...hits){
 		this.phokeType = phokeType;
 		this.health = health;

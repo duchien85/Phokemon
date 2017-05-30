@@ -1,5 +1,9 @@
 package phokemon;
-
+/**
+ * @version 5-15-17
+ * @author Rishabh
+ *
+ */
 public class Grass implements PhokeType{
 	@Override
 	public String toString() {

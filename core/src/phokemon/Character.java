@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * 5-10-17
- * @author Jacob Murry, Rishabh A
+ * @author Jacob Murry, Rishabh, Nick, Chintan, Nick
  *
  */
 public abstract class Character {

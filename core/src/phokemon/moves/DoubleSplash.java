@@ -5,7 +5,11 @@ import com.apjava.phokemon.screens.BattleScreen;
 import phokemon.AttackMove;
 import phokemon.Phokes;
 import phokemon.Water;
-
+/**
+ * @version 5-22-17
+ * @author Rishabh, Jacob
+ *
+ */
 public class DoubleSplash extends AttackMove{
 	
 	public DoubleSplash(){

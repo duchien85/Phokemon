@@ -2,6 +2,11 @@ package phokemon;
 
 import com.apjava.phokemon.screens.BattleScreen;
 
+/**
+ * 
+ * @author Jacob, Rishabh, Kalpit
+ *
+ */
 public abstract class AttackMove {
 	protected int power, accuracy;
 	protected PhokeType type;

@@ -5,7 +5,11 @@ import com.apjava.phokemon.screens.BattleScreen;
 import phokemon.AttackMove;
 import phokemon.Electric;
 import phokemon.Phokes;
-
+/**
+ * @version 5-22-17
+ * @author Rishabh, Jacob
+ *
+ */
 public class ElectricSting extends AttackMove{
 	public ElectricSting(){
 		super(30, 80, new Electric(), "Electric Sting");

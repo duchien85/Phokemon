@@ -5,6 +5,11 @@ import phokemon.Character;
 import phokemon.Normal;
 import phokemon.StatBoost;
 
+/**
+ * @version 5-22-17
+ * @author Rishabh, Jacob
+ *
+ */
 public class Agility extends AttackMove {
 	public Agility(){
 		super(0, 100, new StatBoost(), "Agility");

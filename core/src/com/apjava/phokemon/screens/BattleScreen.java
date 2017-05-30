@@ -27,6 +27,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -40,6 +41,10 @@ import phokemon.HealthBar;
 import phokemon.Phokes;
 import phokemon.Player;
 import phokemon.phokes.Barnizard;
+import phokemon.phokes.FireBat;
+import phokemon.phokes.LawnClippings;
+import phokemon.phokes.Thundermama;
+import phokemon.phokes.Tornado;
 import phokemon.phokes.WaterSnake;
 
 /**
@@ -57,20 +62,21 @@ public class BattleScreen implements Screen {
 	private Sprite pokemon1, pokemon2;
 	private boolean animatePokemon = true;
 	private Music music, victoryMusic;
-	private Sound buttonSound, flameSound, electricSound, dieSound, waterSound, superEffective, notEffective, statBoostSound;
+	private Sound buttonSound, flameSound, electricSound, dieSound, waterSound, superEffective, notEffective, statBoostSound, switchSound;
 	private BitmapFont font;
 	private List<ParticleEffect> particleEffects;
-	private List<Actor> battleLog, player1Options, player1Moves, player2Options, player2Moves;
+	private List<Actor> battleLog, player1Options, player1Moves, player2Options, player2Moves, player1Switches, player2Switches;
 	//will remove and add to phokemon
 	private HealthBar hbTest, hbTest2;
-	public static int BATTLE_LOG = 0, PLAYER1 = 1, PLAYER1_ATTACK = 2, PLAYER2 = 3, PLAYER2_ATTACK = 4;
+	public static int BATTLE_LOG = 0, PLAYER1 = 1, PLAYER1_ATTACK = 2, PLAYER2 = 3, PLAYER2_ATTACK = 4, PLAYER1_SWITCH = 5, PLAYER2_SWITCH = 6;
 	private int dialogOption = 0;
 	private int nextDialogOption = PLAYER1;
 	private boolean isDraw = false;
 	private Player player1, player2;
 	private BattleLabel battleLabel;
 	private boolean player1Attacking = false, player2Attacking = false;
-	private int player1Move = 0, player2Move = 0;
+	private int player1Move = 0, player2Move = 0, player1Switch=0, player2Switch=0;
+	private Label name1, name2;
 	
 	public BattleScreen(Game game) {
 		this.game = game;
@@ -101,6 +107,7 @@ public class BattleScreen implements Screen {
 		superEffective = Gdx.audio.newSound(Gdx.files.internal("sounds/supereffective1.wav"));
 		notEffective = Gdx.audio.newSound(Gdx.files.internal("sounds/noteffective1.wav"));
 		statBoostSound = Gdx.audio.newSound(Gdx.files.internal("sounds/statboost.wav"));
+		switchSound = Gdx.audio.newSound(Gdx.files.internal("sounds/phokeball.wav"));
 		//FONT AND LABELS
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/gameboyfont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -114,6 +121,8 @@ public class BattleScreen implements Screen {
 		player2Moves = new ArrayList<Actor>();
 		player1Options = new ArrayList<Actor>();
 		player2Options = new ArrayList<Actor>();
+		player1Switches = new ArrayList<Actor>();
+		player2Switches = new ArrayList<Actor>();
 		battleLog = new ArrayList<Actor>();
 		
 		//battle log
@@ -157,6 +166,7 @@ public class BattleScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				buttonSound.play();
+				showSwitchOptions(true);
 			}
 		});
 		player1Options.add(switch1Label);
@@ -180,6 +190,7 @@ public class BattleScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				buttonSound.play();
+				showSwitchOptions(false);
 			}
 		});
 		player2Options.add(switch2Label);
@@ -191,14 +202,16 @@ public class BattleScreen implements Screen {
 		
 		//create players and phokemon
 		//player 1
+		Phokes lawnclippings = new LawnClippings(true);
 		Phokes barnizard = new Barnizard(true);
-		player1 = new Player(this, 1, barnizard);
+		Phokes thundermama = new Thundermama(true);
+		player1 = new Player(this, 1, thundermama, lawnclippings, barnizard);
 		player1.setSelectedPhokemon(0);
 		player1.setAttack(true);
 		hbTest = new HealthBar(width-width/4.4f, height/2.75f, width/4.9f, height/30, player1.getCurrentPhokemon().getHealth(), player1.getCurrentPhokemon().getMaxHealth());
 		stage.addActor(hbTest);
 		//name label
-		Label name1 = new Label(player1.getCurrentPhokemon().getName(), labelstyle);
+		name1 = new Label(player1.getCurrentPhokemon().getName(), labelstyle);
 		name1.setWidth(width/10);
 		name1.setHeight(height/10);
 		name1.setPosition(width/1.7f, height/2.5f);
@@ -241,13 +254,15 @@ public class BattleScreen implements Screen {
 		//////
 		//player 2
 		Phokes watersnake = new WaterSnake(false);
-		player2 = new Player(this, 2, watersnake);
+		Phokes firebat = new FireBat(false);
+		Phokes tornado = new Tornado(false);
+		player2 = new Player(this, 2, tornado, firebat, watersnake);
 		player2.setSelectedPhokemon(0);
 		player2.setAttack(false);
 		hbTest2 = new HealthBar(width/5.2f, height-height/4.17f, width/4.9f, height/30, player2.getCurrentPhokemon().getHealth(), player2.getCurrentPhokemon().getMaxHealth());
 		stage.addActor(hbTest2);
 		//pokemon name labels
-		Label name2 = new Label(player2.getCurrentPhokemon().getName(), labelstyle);
+		name2 = new Label(player2.getCurrentPhokemon().getName(), labelstyle);
 		name2.setWidth(width/10);
 		name2.setHeight(height/10);
 		name2.setPosition(width/50.0f, height-height/4.9f);
@@ -483,6 +498,18 @@ public class BattleScreen implements Screen {
 			else
 				actor.setVisible(false);
 		}
+		for(Actor actor: player1Switches) {
+			if(dialogOption==BattleScreen.PLAYER1_SWITCH)
+				actor.setVisible(true);
+			else
+				actor.setVisible(false);
+		}
+		for(Actor actor: player2Switches) {
+			if(dialogOption==BattleScreen.PLAYER2_SWITCH)
+				actor.setVisible(true);
+			else
+				actor.setVisible(false);
+		}
 		for(Actor actor: battleLog) {
 			if(dialogOption==BattleScreen.BATTLE_LOG)
 				actor.setVisible(true);
@@ -535,36 +562,50 @@ public class BattleScreen implements Screen {
 		nextDialogOption = d;
 	}
 	
+	/**
+	 * Have each player switch phokemon or attack
+	 */
 	private void doMoves() {
 		checkPhokemon();
 		if(!player1Attacking) {
 			//switch player 1
+			switchPhokemon(true);
 		} if(!player2Attacking) {
 			//switch player 2
+			Timer.schedule(new Task() {
+				
+				@Override
+				public void run() {
+					switchPhokemon(false);
+				}
+			}, 2.0f);
+			
 		}
 		if(player1.getCurrentPhokemon().getSpeed()>player2.getCurrentPhokemon().getSpeed()) {
 			//player 1 attacks first
-			if(player1Attacking)
+			if(player1Attacking && !checkPhokemon())
 				player1Attack();
-			if(player2Attacking) {
+			if(player2Attacking && !checkPhokemon()) {
 				Timer.schedule(new Task() {
 					
 					@Override
 					public void run() {
 						player2Attack();
+						checkPhokemon();
 					}
 				}, 5.0f);
 			}
 		} else {
 			//player 2 attacks first
-			if(player2Attacking)
+			if(player2Attacking && !checkPhokemon())
 				player2Attack();
-			if(player1Attacking){
+			if(player1Attacking && !checkPhokemon()){
 				Timer.schedule(new Task() {
 					
 					@Override
 					public void run() {
 						player1Attack();
+						checkPhokemon();
 					}
 				}, 5.0f);
 			}
@@ -590,22 +631,23 @@ public class BattleScreen implements Screen {
 		if(player1.attack(player1Move, player1.getCurrentPhokemon(), player2.getCurrentPhokemon()))
     		addPlayer1Effects(player1.getCurrentPhokemon().getMoves().get(player1Move).getPhokeType().toString());
     	hbTest2.setCurrentHealthSmooth(player2.getCurrentPhokemon().getHealth());
-    	checkPhokemon();
 	}
 	
 	private void player2Attack() {
 		if(player2.attack(player2Move, player2.getCurrentPhokemon(), player1.getCurrentPhokemon()))
 			addPlayer2Effects(player2.getCurrentPhokemon().getMoves().get(player2Move).getPhokeType().toString());
 		hbTest.setCurrentHealthSmooth(player1.getCurrentPhokemon().getHealth());
-		checkPhokemon();
 	}
 	
 	/** 
 	 * checks if phokemon are alive
 	 * and proceeds accordingly
+	 * @return true if a phokemon dies
 	 */
-	private void checkPhokemon() {
+	private boolean checkPhokemon() {
+		boolean somePhokeDied = false;
 		if(player1.getCurrentPhokemon().getHealth()<=0) {
+			somePhokeDied = true;
 			player1.getCurrentPhokemon().setAlive(false);
 			//delay death
 			Timer.schedule(new Task(){
@@ -616,7 +658,14 @@ public class BattleScreen implements Screen {
 			    	dieSound.play(5.0f);
 			    	//see if there are any phokemon alive
 					if(player1.canPlay()) {
-						switchPhokemon(true);
+						//switch to first alive phokemon
+						for(int k=0; k<player1.getPhokesList().size(); k++) {
+							if(player1.getPhokemon(k).IsAlive()) {
+								player1Switch = k;
+								switchPhokemon(true);
+								break;
+							}
+						}
 					} else {
 						setDialog(BATTLE_LOG);
 						setNextDialog(BATTLE_LOG);
@@ -627,6 +676,7 @@ public class BattleScreen implements Screen {
 			    }
 			}, 5.0f);
 		} if(player2.getCurrentPhokemon().getHealth()<=0) {
+			somePhokeDied = true;
 			player2.getCurrentPhokemon().setAlive(false);
 			//delay death
 			Timer.schedule(new Task(){
@@ -637,7 +687,15 @@ public class BattleScreen implements Screen {
 			    	dieSound.play(5.0f);
 			    	//see if there are any phokemon alive
 					if(player2.canPlay()) {
-						switchPhokemon(false);
+						//switch to first alive phokemon
+						for(int k=0; k<player2.getPhokesList().size(); k++) {
+							if(player2.getPhokemon(k).IsAlive()) {
+								player2Switch = k;
+								switchPhokemon(false);
+								
+								break;
+							}
+						}
 					} else {
 						setDialog(BATTLE_LOG);
 						setNextDialog(BATTLE_LOG);
@@ -648,18 +706,168 @@ public class BattleScreen implements Screen {
 			    }
 			}, 5.0f);
 		}
+		return somePhokeDied;
+	}
+	
+	/**
+	 * Show the phokemon the player can switch to
+	 * and record what they select
+	 * @param isPlayer1
+	 */
+	private void showSwitchOptions(boolean isPlayer1) {
+		//first remove existing options in case some phokemon have died.
+		if(isPlayer1) {
+			for(int i = player1Switches.size()-1; i>=0; i--) {
+				player1Switches.remove(i).remove();
+			}
+		} else {
+			for(int i = player2Switches.size()-1; i>=0; i--) {
+				player2Switches.remove(i).remove();
+			}
+		}
+		//add the new options
+		if(isPlayer1) {
+			setDialog(PLAYER1_SWITCH);
+			List<Phokes> availablePhokes = new ArrayList<Phokes>();
+			List<Integer> availableIndexes = new ArrayList<Integer>();
+			for(int x=0; x<player1.getPhokesList().size(); x++) {
+				Phokes phoke = player1.getPhokesList().get(x);
+				if(phoke.IsAlive() && x!=player1.getSelectedPhokemon()) {
+					availablePhokes.add(phoke);
+					availableIndexes.add(x);
+				}
+			}
+			for(int i = 0; i<availablePhokes.size(); i++) {
+				final int phokesoptionIndex = availableIndexes.get(i);
+				final int listSize = 4;
+				final Phokes phoke = availablePhokes.get(i);
+				Label phokesoption = new Label(phoke.getName(), labelstyle);
+				phokesoption.setColor(1.0f, 0.0f, 0.0f, 1.0f);
+				
+				phokesoption.setWidth(width/10);
+				phokesoption.setHeight(height/10);
+				float padding = height/60;
+				float horizontalPos = (i==0||i==2) ? 0.0f: 2.5f; 
+				int verticalPos = (i==2||i==3) ? 0: 1; 
+				phokesoption.setPosition(width/2+((width/10+phokesoption.getWidth())*horizontalPos)-(width/10+phokesoption.getWidth())*listSize/2, padding+height/8*verticalPos);
+				//todo it will call this phokesoption when clicked
+				phokesoption.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						buttonSound.play();
+						player1Attacking = false;
+						player1Switch = phokesoptionIndex;
+						//tell log for player 2 to select move
+						setDialog(BATTLE_LOG);
+						setNextDialog(PLAYER2);
+						updateBattleLog("Player 2 Select Move");
+
+					}
+				});
+				player1Switches.add(phokesoption);
+				stage.addActor(phokesoption);
+			}
+		} else {
+			//player 2 other alive phokemon
+			setDialog(PLAYER2_SWITCH);
+			List<Phokes> availablePhokes = new ArrayList<Phokes>();
+			List<Integer> availableIndexes = new ArrayList<Integer>();
+			for(int x=0; x<player2.getPhokesList().size(); x++) {
+				Phokes phoke = player2.getPhokesList().get(x);
+				if(phoke.IsAlive() && x!=player2.getSelectedPhokemon()) {
+					availablePhokes.add(phoke);
+					availableIndexes.add(x);
+				}
+			}
+			for(int i = 0; i<availablePhokes.size(); i++) {
+				final int phokesoptionIndex = availableIndexes.get(i);
+				final int listSize = 4;
+				final Phokes phoke = availablePhokes.get(i);
+				Label phokesoption = new Label(phoke.getName(), labelstyle);
+				phokesoption.setColor(1.0f, 0.0f, 0.0f, 1.0f);
+				
+				phokesoption.setWidth(width/10);
+				phokesoption.setHeight(height/10);
+				float padding = height/60;
+				float horizontalPos = (i==0||i==2) ? 0.0f: 2.5f; 
+				int verticalPos = (i==2||i==3) ? 0: 1; 
+				phokesoption.setPosition(width/2+((width/10+phokesoption.getWidth())*horizontalPos)-(width/10+phokesoption.getWidth())*listSize/2, padding+height/8*verticalPos);
+				//todo it will call this phokesoption when clicked
+				phokesoption.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						buttonSound.play();
+						player2Attacking = false;
+						player2Switch = phokesoptionIndex;
+						//tell log for player 2 to select move
+						setDialog(BATTLE_LOG);
+						isDraw = true;
+						doMoves();
+
+					}
+				});
+				player2Switches.add(phokesoption);
+				stage.addActor(phokesoption);
+			}
+		}
+	}
+	
+	/**
+	 * Update the names of the moves shown to the player
+	 * @param isPlayer1
+	 */
+	private void updatePlayerMoves(boolean isPlayer1) {
+		if(isPlayer1) {
+			for(int i=0; i<player1Moves.size(); i++) {
+				try {
+					Label move = (Label) player1Moves.get(i);
+					move.setText(player1.getCurrentPhokemon().getMoves().get(i).toString());
+				} catch(ClassCastException e) {
+					e.printStackTrace();
+				}
+			}
+		} else {
+			for(int i=0; i<player2Moves.size(); i++) {
+				try {
+					Label move = (Label) player2Moves.get(i);
+					move.setText(player2.getCurrentPhokemon().getMoves().get(i).toString());
+				} catch(ClassCastException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public void switchPhokemon(boolean isPlayer1) {
 		if(isPlayer1) {
-			player1.switchPhoke();
+			switchSound.play(6.0f);
+			player1.switchPhoke(player1Switch);
+			updateBattleLog("Player 1 switched to "+player1.getCurrentPhokemon().getName());
+			updatePlayerMoves(true);
+			name1.setText(player1.getCurrentPhokemon().getName());
+			hbTest.setMaxHealth(player1.getCurrentPhokemon().getMaxHealth());
+			hbTest.setCurrentHealth(player1.getCurrentPhokemon().getHealth());
+		} else {
+			switchSound.play(6.0f);
+			player2.switchPhoke(player2Switch);
+			updateBattleLog("Player 2 switched to "+player2.getCurrentPhokemon().getName());
+			updatePlayerMoves(false);
+			name2.setText(player2.getCurrentPhokemon().getName());
+			hbTest2.setMaxHealth(player2.getCurrentPhokemon().getMaxHealth());
+			hbTest2.setCurrentHealth(player2.getCurrentPhokemon().getHealth());
 		}
 	}
 	
+	/**
+	 * Play an actual sound
+	 */
 	public void playSuperEffectiveSound() {
 		superEffective.play(6.0f);
 	}
 	
+	/**
+	 * Play an actual sound
+	 */
 	public void playNotEffectiveSound() {
 		notEffective.play(6.0f);
 	}
@@ -704,6 +912,7 @@ public class BattleScreen implements Screen {
 		superEffective.dispose();
 		notEffective.dispose();
 		statBoostSound.dispose();
+		switchSound.dispose();
 		font.dispose();
 	}
 

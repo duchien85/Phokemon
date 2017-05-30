@@ -1,5 +1,10 @@
 package phokemon;
 
+/**
+ * @version 5-26-17
+ * @author Rishabh, Jacob
+ *
+ */
 public class StatBoost implements PhokeType {
 	
 	@Override

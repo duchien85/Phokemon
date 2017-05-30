@@ -5,6 +5,11 @@ import phokemon.Character;
 import phokemon.Normal;
 import phokemon.StatBoost;
 
+/**
+ * @version 5-22-17
+ * @author Rishabh, Jacob
+ *
+ */
 public class BulkUp extends AttackMove{
 	public BulkUp(){
 		super(0, 100, new StatBoost(), "Bulk Up");

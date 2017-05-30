@@ -1,5 +1,9 @@
 package phokemon;
-
+/**
+ * @version 5-12-17
+ * @author Rishabh
+ *
+ */
 public class Fire implements PhokeType{
 	@Override
 	public String toString() {

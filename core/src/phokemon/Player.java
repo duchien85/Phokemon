@@ -6,6 +6,12 @@ import java.util.Scanner;
 
 import com.apjava.phokemon.screens.BattleScreen;
 
+/**
+ * 
+ * @author Rishabh, Jacob, Kalpit, Chintan, Nick
+ * @version 5-21-17
+ *
+ */
 public class Player {
 	private List<Phokes> phokemonList;
 	private int selectedPhokemon = 0;
@@ -61,22 +67,26 @@ public class Player {
 			return null;
 		}
 	}
+	
+	/**
+	 * Get the phokemon
+	 * @param target phokemon index
+	 * @return phokemon object at index
+	 */
 	public Phokes getPhokemon(int target){
 		return phokemonList.get(target);
 	}
-	public void switchPhoke(){
-		int x = 0;
-		//if(getCurrentPhokemon().isAlive) System.out.println(getCurrentPhokemon().getName() + " has fainted");
-		do{
-		System.out.println("Player " + playerNum + ", select the number slot of the phokemon you want to switch to.");
-		x = f.nextInt();
-		if(getPhokemon(x).isAlive){
-			setSelectedPhokemon(x);
+
+	
+	public void switchPhoke(int index){
+		if(getPhokemon(index).isAlive){
+			setSelectedPhokemon(index);
 		}
 		else{
 			System.out.println("That phokemon is Knocked Out");
+			
 		}
-		}while(!getPhokemon(x).isAlive);
+
 	}
 	
 	/**

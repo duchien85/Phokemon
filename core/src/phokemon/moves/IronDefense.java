@@ -4,7 +4,11 @@ import phokemon.AttackMove;
 import phokemon.Character;
 import phokemon.Normal;
 import phokemon.StatBoost;
-
+/**
+ * @version 5-22-17
+ * @author Rishabh
+ *
+ */
 public class IronDefense extends AttackMove{
 	public IronDefense(){
 		super(0, 100, new StatBoost(), "Iron Defense");
