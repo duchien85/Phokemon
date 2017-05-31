@@ -377,6 +377,32 @@ public class BattleScreen implements Screen {
 			}
 			particleEffects.add(fire);
 			statBoostSound.play(3.0f);
+		} else if(typeStr.equalsIgnoreCase("flying")) {
+			ParticleEffect fire = new ParticleEffect();
+			fire.load(Gdx.files.internal("particles/flying.particle"), Gdx.files.internal("particles/"));
+			fire.setPosition(player1.getCurrentPhokemon().getSprite().getX()+player1.getCurrentPhokemon().getSprite().getWidth()/2, player1.getCurrentPhokemon().getSprite().getY()+player1.getCurrentPhokemon().getSprite().getHeight());
+			fire.start();
+			for(ParticleEmitter emitter: fire.getEmitters()) {
+				ScaledNumericValue angle = emitter.getAngle();
+				float degrees = 20.0f;
+				angle.setLow(degrees);
+				angle.setHigh(degrees+90.0f, degrees-90.0f);
+			}
+			particleEffects.add(fire);
+			//electricSound.play(3.0f);
+		} else if(typeStr.equalsIgnoreCase("normal")) {
+			ParticleEffect fire = new ParticleEffect();
+			fire.load(Gdx.files.internal("particles/normal.particle"), Gdx.files.internal("particles/"));
+			fire.setPosition(player1.getCurrentPhokemon().getSprite().getX()+player1.getCurrentPhokemon().getSprite().getWidth()/2, player1.getCurrentPhokemon().getSprite().getY()+player1.getCurrentPhokemon().getSprite().getHeight());
+			fire.start();
+			for(ParticleEmitter emitter: fire.getEmitters()) {
+				ScaledNumericValue angle = emitter.getAngle();
+				float degrees = 20.0f;
+				angle.setLow(degrees);
+				angle.setHigh(degrees+90.0f, degrees-90.0f);
+			}
+			particleEffects.add(fire);
+			//electricSound.play(3.0f);
 		}
 	}
 	
@@ -450,6 +476,32 @@ public class BattleScreen implements Screen {
 			}
 			particleEffects.add(fire);
 			statBoostSound.play(6.0f);
+		} else if(typeStr.equalsIgnoreCase("flying")) {
+			ParticleEffect fire = new ParticleEffect();
+			fire.load(Gdx.files.internal("particles/flying2.particle"), Gdx.files.internal("particles/"));
+			fire.setPosition(player2.getCurrentPhokemon().getSprite().getX()+player2.getCurrentPhokemon().getSprite().getWidth()/2, player2.getCurrentPhokemon().getSprite().getY()+player2.getCurrentPhokemon().getSprite().getHeight());
+			fire.start();
+			for(ParticleEmitter emitter: fire.getEmitters()) {
+				ScaledNumericValue angle = emitter.getAngle();
+				float degrees = 220.0f;
+				angle.setLow(degrees);
+				angle.setHigh(degrees+90.0f, degrees-90.0f);
+			}
+			particleEffects.add(fire);
+			
+		} else if(typeStr.equalsIgnoreCase("normal")) {
+			ParticleEffect fire = new ParticleEffect();
+			fire.load(Gdx.files.internal("particles/normal2.particle"), Gdx.files.internal("particles/"));
+			fire.setPosition(player2.getCurrentPhokemon().getSprite().getX()+player2.getCurrentPhokemon().getSprite().getWidth()/2, player2.getCurrentPhokemon().getSprite().getY()+player2.getCurrentPhokemon().getSprite().getHeight());
+			fire.start();
+			for(ParticleEmitter emitter: fire.getEmitters()) {
+				ScaledNumericValue angle = emitter.getAngle();
+				float degrees = 220.0f;
+				angle.setLow(degrees);
+				angle.setHigh(degrees+90.0f, degrees-90.0f);
+			}
+			particleEffects.add(fire);
+			
 		}
 	}
 
