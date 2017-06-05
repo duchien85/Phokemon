@@ -57,10 +57,15 @@ public class PickingScreen implements Screen{
 	private Music music;
 	private Sound buttonSound;
 	private BitmapFont font;
-	private List<Phokes> phokemonList;
+	private List<Phokes> phokemonList, player1List, player2List;
 	private int selectedPhokemon = 0;
 	private BattleLabel phokemonLabel;
+	private boolean doneSelecting = false;
 	
+	/**
+	 * Create new picking screen with access to game
+	 * @param game
+	 */
 	public PickingScreen(Game game) {
 		this.game = game;
 		
@@ -93,6 +98,8 @@ public class PickingScreen implements Screen{
 		
 		//Add every phokemon to the list
 		phokemonList = new ArrayList<Phokes>();
+		player1List = new ArrayList<Phokes>();
+		player2List = new ArrayList<Phokes>();
 		phokemonList.add(new WaterSnake(true));
 		phokemonList.add(new Barnizard(true));
 		phokemonList.add(new FireBat(true));
@@ -110,12 +117,52 @@ public class PickingScreen implements Screen{
 		phokemonLabel.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				buttonSound.play();
-				//transition phokemons
-				
+				if(doneSelecting) {
+					buttonSound.play();
+					//see if both players have selected 3 phokemon each
+					game.setScreen(new BattleScreen(game, player1List, player2List));
+				}
 			}
 		});
 		stage.addActor(phokemonLabel);
+		
+		//label for player1 to add phokemon
+		Label player1AddBtn = new Label("Add to player 1", labelstyle);
+		player1AddBtn.setAlignment(Align.center);
+		player1AddBtn.setPosition(width/2-player1AddBtn.getWidth()/2, height/6);
+		player1AddBtn.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if(player1List.size()<3) {
+					buttonSound.play();
+					addPhokeToList(true);
+					if(player1List.size()==3 && player2List.size()==3) {
+						phokemonLabel.setTextAnimated("Battle");
+						doneSelecting = true;
+					}
+				}
+			}
+		});
+		stage.addActor(player1AddBtn);
+		//label for player2 to add phokemon
+		Label player2AddBtn = new Label("Add to player 2", labelstyle);
+		player2AddBtn.setAlignment(Align.center);
+		player2AddBtn.setPosition(width/2-player2AddBtn.getWidth()/2, height/10);
+		player2AddBtn.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				if(player2List.size()<3) {
+					buttonSound.play();
+					addPhokeToList(false);
+					if(player1List.size()==3 && player2List.size()==3) {
+						phokemonLabel.setTextAnimated("Battle");
+						doneSelecting = true;
+					}
+				}
+			}
+		});
+		stage.addActor(player2AddBtn);
+		//
 		
 		Image leftImage = new Image(new Texture("leftarrow.png"));
 		leftImage.setSize(width/8, height/5);
@@ -124,15 +171,17 @@ public class PickingScreen implements Screen{
 		leftImage.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				buttonSound.play();
-				//transition phokemons
-				if(selectedPhokemon>0) {
-					selectedPhokemon--;
-					setShownPhokemon();
-					
-				} else {
-					selectedPhokemon=phokemonList.size()-1;
-					setShownPhokemon();
+				if(!doneSelecting) {
+					buttonSound.play();
+					//transition phokemons
+					if(selectedPhokemon>0) {
+						selectedPhokemon--;
+						setShownPhokemon();
+
+					} else {
+						selectedPhokemon=phokemonList.size()-1;
+						setShownPhokemon();
+					}
 				}
 			}
 		});
@@ -144,28 +193,62 @@ public class PickingScreen implements Screen{
 		rightImage.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				buttonSound.play();
-				//transition phokemons
-				if(selectedPhokemon<phokemonList.size()-1) {
-					selectedPhokemon++;
-					setShownPhokemon();		
-				} else {
-					selectedPhokemon=0;
-					setShownPhokemon();
+				if(!doneSelecting) {
+					buttonSound.play();
+					//transition phokemons
+					if(selectedPhokemon<phokemonList.size()-1) {
+						selectedPhokemon++;
+						setShownPhokemon();		
+					} else {
+						selectedPhokemon=0;
+						setShownPhokemon();
+					}
 				}
 			}
 		});
 		stage.addActor(rightImage);
 		setShownPhokemon();
-		final Label battle = new Label("Battle", labelstyle);
 		
     
 	}
 	
+	/**
+	 * Set name and sprite position of new phokemon to show
+	 */
 	private void setShownPhokemon() {
 		phokemonLabel.setTextAnimated(phokemonList.get(selectedPhokemon).getName());
 		phokemonList.get(selectedPhokemon).getSprite().setX(width/2.0f-phokemonList.get(selectedPhokemon).getSprite().getWidth()/2);
 		phokemonList.get(selectedPhokemon).getSprite().setY(height/2.6f);
+	}
+	
+	/**
+	 * Method to prevent previous phokemon that were moved in this class being used in
+	 * battle screen.
+	 * @param player1 if player 1
+	 */
+	private void addPhokeToList(boolean player1) {
+		Phokes newPhoke = null;
+		Phokes currentPhoke = phokemonList.get(selectedPhokemon);
+		if(currentPhoke instanceof Barnizard)
+			newPhoke = new Barnizard(player1);
+		else if(currentPhoke instanceof FireBat)
+			newPhoke = new FireBat(player1);
+		else if(currentPhoke instanceof LawnClippings)
+			newPhoke = new LawnClippings(player1);
+		else if(currentPhoke instanceof Mossy)
+			newPhoke = new Mossy(player1);
+		else if(currentPhoke instanceof Thundermama)
+			newPhoke = new Thundermama(player1);
+		else if(currentPhoke instanceof Tornado)
+			newPhoke = new Tornado(player1);
+		else if(currentPhoke instanceof Uglurchin)
+			newPhoke = new Uglurchin(player1);
+		else if(currentPhoke instanceof WaterSnake)
+			newPhoke = new WaterSnake(player1);
+		if(player1)
+			player1List.add(newPhoke);
+		else
+			player2List.add(newPhoke);
 	}
 	
 	@Override

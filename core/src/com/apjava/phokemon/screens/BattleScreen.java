@@ -77,10 +77,12 @@ public class BattleScreen implements Screen {
 	private boolean player1Attacking = false, player2Attacking = false;
 	private int player1Move = 0, player2Move = 0, player1Switch=0, player2Switch=0;
 	private Label name1, name2;
+	private List<Phokes> player1Picks, player2Picks;
 	
-	public BattleScreen(Game game) {
+	public BattleScreen(Game game, List<Phokes> player1Picks, List<Phokes> player2Picks) {
 		this.game = game;
-		
+		this.player1Picks = player1Picks;
+		this.player2Picks = player2Picks;
 	}
 
 	@Override
@@ -202,10 +204,7 @@ public class BattleScreen implements Screen {
 		
 		//create players and phokemon
 		//player 1
-		Phokes lawnclippings = new LawnClippings(true);
-		Phokes barnizard = new Barnizard(true);
-		Phokes thundermama = new Thundermama(true);
-		player1 = new Player(this, 1, thundermama, lawnclippings, barnizard);
+		player1 = new Player(this, 1, player1Picks.toArray(new Phokes[player1Picks.size()]));
 		player1.setSelectedPhokemon(0);
 		player1.setAttack(true);
 		hbTest = new HealthBar(width-width/4.4f, height/2.75f, width/4.9f, height/30, player1.getCurrentPhokemon().getHealth(), player1.getCurrentPhokemon().getMaxHealth());
@@ -234,11 +233,7 @@ public class BattleScreen implements Screen {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					buttonSound.play();
-			    	/*if(player1.attack(attackIndex, player1.getCurrentPhokemon(), player2.getCurrentPhokemon()))
-			    		addPlayer1Effects(move.getPhokeType().toString());
-			    	hbTest2.setCurrentHealthSmooth(player2.getCurrentPhokemon().getHealth());
-			    	checkPhokemon();*/
-					player1Attacking = true;
+			    	player1Attacking = true;
 					player1Move = attackIndex;
 					//tell log for player 2 to select move
 					setDialog(BATTLE_LOG);
@@ -253,10 +248,7 @@ public class BattleScreen implements Screen {
 		
 		//////
 		//player 2
-		Phokes watersnake = new WaterSnake(false);
-		Phokes firebat = new FireBat(false);
-		Phokes tornado = new Tornado(false);
-		player2 = new Player(this, 2, tornado, firebat, watersnake);
+		player2 = new Player(this, 2, player2Picks.toArray(new Phokes[player2Picks.size()]));
 		player2.setSelectedPhokemon(0);
 		player2.setAttack(false);
 		hbTest2 = new HealthBar(width/5.2f, height-height/4.17f, width/4.9f, height/30, player2.getCurrentPhokemon().getHealth(), player2.getCurrentPhokemon().getMaxHealth());
@@ -285,11 +277,7 @@ public class BattleScreen implements Screen {
 			attack.addListener(new ClickListener(){
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					/*buttonSound.play();
-					if(player2.attack(attackIndex, player2.getCurrentPhokemon(), player1.getCurrentPhokemon()))
-						addPlayer2Effects(move.getPhokeType().toString());
-					hbTest.setCurrentHealthSmooth(player1.getCurrentPhokemon().getHealth());
-					checkPhokemon();*/
+					buttonSound.play();
 					player2Attacking = true;
 					player2Move = attackIndex;
 					//tell log for player 2 to select move
@@ -722,7 +710,7 @@ public class BattleScreen implements Screen {
 				@Override
 				public void run() {
 					updateBattleLog(player1.getCurrentPhokemon().getName()+" was burned");
-					addPlayer2Effects("burn");
+					addPlayer1Effects("burn");
 					player1.getCurrentPhokemon().doDamage(5);
 					hbTest.setCurrentHealthSmooth(player1.getCurrentPhokemon().getHealth());
 					checkPhokemon();

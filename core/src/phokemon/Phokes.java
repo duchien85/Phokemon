@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Disposable;
  * @author Rishabh, Jacob, Kalpit, Chintan, Nick
  * @version 5-20-17
  */
-public class Phokes extends Character implements Disposable{
+public class Phokes extends Character implements Disposable {
 
 	public boolean burned, paralyzed;
 	private PhokeType phokeType;
@@ -80,4 +80,5 @@ public class Phokes extends Character implements Disposable{
 	public void dispose() {
 		phokesTexture.dispose();
 	}
+	
 }
