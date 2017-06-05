@@ -9,19 +9,39 @@ import java.util.List;
  *
  */
 public abstract class Character {
-	protected int health, maxHealth, attack, defense, speed;
-	protected String name;
-	//protected String status;
-	protected List<AttackMove> moves;
-	protected boolean isAlive = true;
-	public boolean IsAlive() {
+	private int health, maxHealth, attack, defense, speed;
+	private String name;
+	private List<AttackMove> moveList;
+	private boolean alive = true;
+	
+	/**
+	 * Assign template parameters
+	 * @param health
+	 * @param maxHealth
+	 * @param attack
+	 * @param defense
+	 * @param speed
+	 * @param name
+	 * @param moves
+	 */
+	public Character(int health, int maxHealth, int attack, int defense, int speed, String name, List<AttackMove> moves) {
+		this.health = health;
+		this.maxHealth = maxHealth;
+		this.attack = attack;
+		this.defense = defense;
+		this.speed = speed;
+		this.name = name;
+		this.moveList = moves;
+	}
+	
+	public boolean isAlive() {
 		if(health < 0){
-			isAlive = false;
+			alive = false;
 		}
-		return isAlive;
+		return alive;
 	}
 	public void setAlive(boolean isAlive) {
-		this.isAlive = isAlive;
+		this.alive = isAlive;
 	}
 	public void doDamage(int damage) {
 		
@@ -60,10 +80,10 @@ public abstract class Character {
 		this.name = name;
 	}
 	public List<AttackMove> getMoves() {
-		return moves;
+		return moveList;
 	}
 	public void setMoves(List<AttackMove> moves) {
-		this.moves = moves;
+		this.moveList = moves;
 	}
 	
 }

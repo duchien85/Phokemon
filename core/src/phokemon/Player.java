@@ -48,7 +48,7 @@ public class Player {
 	public boolean canPlay() {
 		boolean canPlay = false;
 		for(int o = 0; o < phokemonList.size(); o ++)
-		if (phokemonList.get(o).isAlive){
+		if (phokemonList.get(o).isAlive()){
 			canPlay = true;
 		}
 			return canPlay;
@@ -79,7 +79,7 @@ public class Player {
 
 	
 	public void switchPhoke(int index){
-		if(getPhokemon(index).isAlive){
+		if(getPhokemon(index).isAlive()){
 			setSelectedPhokemon(index);
 		}
 		else{

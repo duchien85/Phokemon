@@ -1,6 +1,7 @@
 package phokemon;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,19 +33,11 @@ public class Phokes extends Character implements Disposable{
 	 * @param hits the attacks
 	 */
 	public Phokes(boolean isPlayer1, String image, String name, PhokeType phokeType, int health, int attack, int defense, int speed,  AttackMove...hits){
+		super(health, health, attack, defense, speed, name, createMoveList(hits));
 		this.phokeType = phokeType;
-		this.health = health;
-		this.maxHealth = health;
-		this.attack = attack;
-		this.defense = defense;
-		this.speed = speed;
-		this.name = name;
 		paralyzed = false;
 		burned = false;
-		moves = new ArrayList<AttackMove>();
-		for( int m = 0; m < hits.length; m++){
-			moves.add(hits[m]);
-		}
+		
 		
 		//graphics
 		phokesTexture = new Texture(image);
@@ -56,6 +49,14 @@ public class Phokes extends Character implements Disposable{
 		else
 			phokesSprite.setBounds(width-width/3, height/2.0f, width/4, height/4);
 		
+	}
+	
+	private static List<AttackMove> createMoveList(AttackMove... attack) {
+		List<AttackMove> moves = new ArrayList<AttackMove>();
+		for( int m = 0; m < attack.length; m++){
+			moves.add(attack[m]);
+		}
+		return moves;
 	}
 	
 	/**

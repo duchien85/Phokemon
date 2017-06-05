@@ -6,7 +6,11 @@ import phokemon.moves.BulletSeed;
 import phokemon.moves.FrenzyPlant;
 import phokemon.moves.HyperBeam;
 import phokemon.moves.SwordsDance;
-
+/**
+ * @version 5-23-17
+ * @author Rishabh, Jacob
+ *
+ */
 public class LawnClippings extends Phokes{
 	
 	public LawnClippings(boolean isPlayer1){

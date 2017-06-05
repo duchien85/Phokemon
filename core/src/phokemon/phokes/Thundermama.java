@@ -6,7 +6,11 @@ import phokemon.moves.BulkUp;
 import phokemon.moves.DoubleEdge;
 import phokemon.moves.ElectricSting;
 import phokemon.moves.Thunder;
-
+/**
+ * @version 5-23-17
+ * @author Rishabh, Jacob, Nick
+ *
+ */
 public class Thundermama extends Phokes{
 	
 	public Thundermama(boolean isPlayer1){

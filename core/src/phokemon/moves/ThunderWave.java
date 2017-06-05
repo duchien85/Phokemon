@@ -5,7 +5,11 @@ import com.apjava.phokemon.screens.BattleScreen;
 import phokemon.AttackMove;
 import phokemon.Electric;
 import phokemon.Phokes;
-
+/**
+ * @version 5-23-17
+ * @author Rishabh, Jacob
+ *
+ */
 public class ThunderWave extends AttackMove{
 	
 	public ThunderWave(){

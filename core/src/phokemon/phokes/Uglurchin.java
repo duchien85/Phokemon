@@ -6,7 +6,11 @@ import phokemon.moves.Agility;
 import phokemon.moves.DoubleSplash;
 import phokemon.moves.Surf;
 import phokemon.moves.Tackle;
-
+/**
+ * @version 5-23-17
+ * @author Rishabh, Jacob, Chintan
+ *
+ */
 public class Uglurchin extends Phokes{
 	public Uglurchin(boolean isPlayer1){
 		super(isPlayer1, "Uglurchin.png", "Uglurchin", new Water(), 145, 120, 85, 55, new Surf(), new DoubleSplash(), new Tackle(), new Agility());

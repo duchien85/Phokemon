@@ -71,7 +71,7 @@ public abstract class AttackMove {
 			if(battleScreen!=null)
 				battleScreen.playNotEffectiveSound();
 		}
-		int damage = (int) (((22*power*((double)power/opponent.defense))/50+2)*multiplyer);
+		int damage = (int) (((22*power*((double)power/opponent.getDefense()))/50+2)*multiplyer);
 		
 		return damage;
 	}

@@ -6,7 +6,11 @@ import phokemon.moves.BraveBird;
 import phokemon.moves.HyperBeam;
 import phokemon.moves.SwordsDance;
 import phokemon.moves.WingAttack;
-
+/**
+ * @version 5-23-17
+ * @author Rishabh, Jacob, Kalpit
+ *
+ */
 public class Tornado extends Phokes{
 	
 	public Tornado(boolean isPlayer1){

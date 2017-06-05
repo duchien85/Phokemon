@@ -22,19 +22,25 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  * @author Jacob Murry
  * @version 5-18-17
  */
-public class MenuScreen implements Screen {
+public class AboutScreen implements Screen {
 	private Game game;
 	private SpriteBatch batch;
 	private Texture bgImg;
 	private Stage stage;
 	private float width, height;
 	private LabelStyle labelstyle;
-	private Music music;
 	private BitmapFont font;
 	private Sound buttonSound;
+	private Screen menuScreen;
 	
-	public MenuScreen(Game game1) {
-		this.game = game1;
+	public AboutScreen(Game game, Screen menu) {
+		this.game = game;
+		this.menuScreen = menu;
+		
+	}
+
+	@Override
+	public void show() {
 		batch = new SpriteBatch();
 		stage = new Stage();
 		width = Gdx.graphics.getWidth();
@@ -42,49 +48,26 @@ public class MenuScreen implements Screen {
 		
 		//background image
 		bgImg = new Texture("menuBG.png");
-		//music
-		music = Gdx.audio.newMusic(Gdx.files.internal("music/mainmenumusic.mp3"));
-		music.setLooping(true);
-		music.play();
 		buttonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick.wav"));
 		//FONT AND LABELS
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/gameboyfont.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = (int) (height/8);
+		parameter.size = (int) (height/16);
 		font = generator.generateFont(parameter);
 		labelstyle = new LabelStyle();
 		labelstyle.font = font;
 		labelstyle.fontColor = Color.BLACK;
-		Label playbtn = new Label("Play", labelstyle);
+		Label playbtn = new Label("Ccreated by Jacob,\nRishabh, Kalpit,\nNick, and Chintan.\nClick to go back", labelstyle);
 		playbtn.setPosition(width/2-playbtn.getWidth()/2, height/2-playbtn.getHeight()/2);
 		playbtn.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				music.stop();
 				buttonSound.play();
-		    	game.setScreen(new BattleScreen(game));	
+		    	game.setScreen(menuScreen);	
 		    	
 		    }
 		});
 		stage.addActor(playbtn);
-		final Screen currentScreen = this;
-		Label aboutbtn = new Label("About", labelstyle);
-		aboutbtn.setPosition(width/2-aboutbtn.getWidth()/2, height/2-aboutbtn.getHeight()/2-playbtn.getHeight()-width/50);
-		aboutbtn.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				//music.stop();
-				buttonSound.play();
-				game.setScreen(new AboutScreen(game, currentScreen));	
-		    	
-		    }
-		});
-		stage.addActor(aboutbtn);
-		
-	}
-
-	@Override
-	public void show() {
 		
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -130,7 +113,6 @@ public class MenuScreen implements Screen {
 		bgImg.dispose();
 		stage.dispose();
 		labelstyle.font.dispose();
-		music.dispose();
 		buttonSound.dispose();
 		font.dispose();
 	}

@@ -5,7 +5,11 @@ import com.apjava.phokemon.screens.BattleScreen;
 import phokemon.AttackMove;
 import phokemon.Fire;
 import phokemon.Phokes;
-
+/**
+ * @version 5-23-17
+ * @author Rishabh, Jacob
+ *
+ */
 public class WillOWisp extends AttackMove{
 	
 	public WillOWisp(){
