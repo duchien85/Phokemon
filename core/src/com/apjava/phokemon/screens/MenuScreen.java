@@ -62,7 +62,7 @@ public class MenuScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 				music.stop();
 				buttonSound.play();
-		    	game.setScreen(new BattleScreen(game));	
+		    	game.setScreen(new PickingScreen(game));	
 		    	
 		    }
 		});

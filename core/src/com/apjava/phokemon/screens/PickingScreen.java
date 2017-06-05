@@ -30,6 +30,16 @@ import com.badlogic.gdx.utils.Align;
 
 import phokemon.BattleLabel;
 import phokemon.HealthBar;
+import phokemon.Phokes;
+import phokemon.moves.BraveBird;
+import phokemon.phokes.Barnizard;
+import phokemon.phokes.FireBat;
+import phokemon.phokes.LawnClippings;
+import phokemon.phokes.Mossy;
+import phokemon.phokes.Thundermama;
+import phokemon.phokes.Tornado;
+import phokemon.phokes.Uglurchin;
+import phokemon.phokes.WaterSnake;
 
 /**
  * @version 5-22-17
@@ -47,8 +57,9 @@ public class PickingScreen implements Screen{
 	private Music music;
 	private Sound buttonSound;
 	private BitmapFont font;
-	private List<String> phokemonList;
+	private List<Phokes> phokemonList;
 	private int selectedPhokemon = 0;
+	private BattleLabel phokemonLabel;
 	
 	public PickingScreen(Game game) {
 		this.game = game;
@@ -81,15 +92,18 @@ public class PickingScreen implements Screen{
 		labelstyle.fontColor = Color.BLACK;
 		
 		//Add every phokemon to the list
-		phokemonList = new ArrayList<String>();
-		phokemonList.add("Water Snake");
-		phokemonList.add("Barnizard");
-		phokemonList.add("Birdude");
-		phokemonList.add("Blazebat");
-		phokemonList.add("Uglurchin");
+		phokemonList = new ArrayList<Phokes>();
+		phokemonList.add(new WaterSnake(true));
+		phokemonList.add(new Barnizard(true));
+		phokemonList.add(new FireBat(true));
+		phokemonList.add(new LawnClippings(true));
+		phokemonList.add(new Uglurchin(true));
+		phokemonList.add(new Mossy(true));
+		phokemonList.add(new Thundermama(true));
+		phokemonList.add(new Tornado(true));
 		//
 		
-		final BattleLabel phokemonLabel = new BattleLabel("Select your phokemon", labelstyle);
+		phokemonLabel = new BattleLabel("Select your phokemon", labelstyle);
 		phokemonLabel.setTextAnimated("Select phokemon\nPlayer 1");
 		phokemonLabel.setAlignment(Align.center);
 		phokemonLabel.setPosition(width/2-phokemonLabel.getWidth()/2, height/4);
@@ -114,11 +128,11 @@ public class PickingScreen implements Screen{
 				//transition phokemons
 				if(selectedPhokemon>0) {
 					selectedPhokemon--;
-					phokemonLabel.setTextAnimated(phokemonList.get(selectedPhokemon));
+					setShownPhokemon();
 					
 				} else {
 					selectedPhokemon=phokemonList.size()-1;
-					phokemonLabel.setTextAnimated(phokemonList.get(selectedPhokemon));
+					setShownPhokemon();
 				}
 			}
 		});
@@ -134,18 +148,24 @@ public class PickingScreen implements Screen{
 				//transition phokemons
 				if(selectedPhokemon<phokemonList.size()-1) {
 					selectedPhokemon++;
-					phokemonLabel.setTextAnimated(phokemonList.get(selectedPhokemon));		
+					setShownPhokemon();		
 				} else {
 					selectedPhokemon=0;
-					phokemonLabel.setTextAnimated(phokemonList.get(selectedPhokemon));
+					setShownPhokemon();
 				}
 			}
 		});
 		stage.addActor(rightImage);
-		
+		setShownPhokemon();
 		final Label battle = new Label("Battle", labelstyle);
 		
     
+	}
+	
+	private void setShownPhokemon() {
+		phokemonLabel.setTextAnimated(phokemonList.get(selectedPhokemon).getName());
+		phokemonList.get(selectedPhokemon).getSprite().setX(width/2.0f-phokemonList.get(selectedPhokemon).getSprite().getWidth()/2);
+		phokemonList.get(selectedPhokemon).getSprite().setY(height/2.6f);
 	}
 	
 	@Override
@@ -154,7 +174,7 @@ public class PickingScreen implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		batch.draw(bgImg, 0, 0, width, height);
-		
+		phokemonList.get(selectedPhokemon).getSprite().draw(batch);
 		batch.end();
 		//decide and set visable and invisible what has to renderered
 		stage.act(delta);
