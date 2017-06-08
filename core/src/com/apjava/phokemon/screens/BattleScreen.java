@@ -767,10 +767,13 @@ public class BattleScreen implements Screen {
 	 */
 	private boolean checkPhokemon() {
 		boolean somePhokeDied = false;
+		float extraDelay = 0.0f;
+		
 		if(player1.getCurrentPhokemon().getHealth()<=0) {
 			somePhokeDied = true;
 			player1.getCurrentPhokemon().setAlive(false);
 			//delay death
+			extraDelay+=5.0f;
 			Timer.schedule(new Task(){
 			    @Override
 			    public void run() {
@@ -795,11 +798,12 @@ public class BattleScreen implements Screen {
 						victoryMusic.play();
 					}
 			    }
-			}, 5.0f);
+			}, extraDelay);
 		} if(player2.getCurrentPhokemon().getHealth()<=0) {
 			somePhokeDied = true;
 			player2.getCurrentPhokemon().setAlive(false);
 			//delay death
+			extraDelay+=5.0f;
 			Timer.schedule(new Task(){
 			    @Override
 			    public void run() {
@@ -825,7 +829,7 @@ public class BattleScreen implements Screen {
 						victoryMusic.play();
 					}
 			    }
-			}, 5.0f);
+			}, extraDelay);
 		}
 		return somePhokeDied;
 	}
