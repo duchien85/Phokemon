@@ -120,15 +120,6 @@ public class Player {
 		this.selectedPhokemon = selectedPhokemon;
 	}
 
-	/**
-	 * @return if this is the player on the left
-	 */
-	public void decideMove(){
-		System.out.println("Player " + playerNum + " select 1 to attack");
-		if(f.nextInt() == 1){
-			isAttack = true;
-		}
-	}
 	public int playerNum() {
 		return playerNum;
 	}
