@@ -14,7 +14,7 @@ import phokemon.moves.SwordsDance;
 public class LawnClippings extends Phokes{
 	
 	public LawnClippings(boolean isPlayer1){
-		super(isPlayer1, "lawnclippings.png", "Lawn Clippings", new Grass(), 130, 110, 70, 125, new BulletSeed(), new FrenzyPlant(), new SwordsDance(), new HyperBeam());
+		super(isPlayer1, "lawnclippings.png", "Lawn Clipping", new Grass(), 130, 110, 70, 125, new BulletSeed(), new FrenzyPlant(), new SwordsDance(), new HyperBeam());
 	}
 
 }
