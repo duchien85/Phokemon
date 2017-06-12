@@ -990,7 +990,7 @@ public class BattleScreen implements Screen {
 	private void updatePlayerMoves(boolean isPlayer1) {
 		if(isPlayer1) {
 			for(int i=0; i<player1Moves.size(); i++) {
-				try {
+				try {//make sure it's a label
 					Label move = (Label) player1Moves.get(i);
 					move.setText(player1.getCurrentPhokemon().getMoves().get(i).toString());
 				} catch(ClassCastException e) {
@@ -999,7 +999,7 @@ public class BattleScreen implements Screen {
 			}
 		} else {
 			for(int i=0; i<player2Moves.size(); i++) {
-				try {
+				try {//make sure it's a label
 					Label move = (Label) player2Moves.get(i);
 					move.setText(player2.getCurrentPhokemon().getMoves().get(i).toString());
 				} catch(ClassCastException e) {
